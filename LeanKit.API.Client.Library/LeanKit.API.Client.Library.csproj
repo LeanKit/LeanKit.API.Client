@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E1A6887D-DCEE-4B78-8187-4BBC1B370776}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LeanKit.API.Client.Library</RootNamespace>
+    <AssemblyName>LeanKit.API.Client.Library</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.104.3.3\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BoardId.cs" />
+    <Compile Include="Enumerations\EventType.cs" />
+    <Compile Include="EventArguments\BoardStatusCheckedEventArgs.cs" />
+    <Compile Include="EventArguments\BoardInfoRefreshedEventArgs.cs" />
+    <Compile Include="EventArguments\BoardChangedEventArgs.cs" />
+    <Compile Include="Exceptions\DuplicateItemException.cs" />
+    <Compile Include="Exceptions\InvalidAPIResourceException.cs" />
+    <Compile Include="Exceptions\ItemNotFoundException.cs" />
+    <Compile Include="Exceptions\LeanKitAPIException.cs" />
+    <Compile Include="Exceptions\NoDataException.cs" />
+    <Compile Include="Exceptions\UnauthorizedAccessException.cs" />
+    <Compile Include="IInitializable.cs" />
+    <Compile Include="ILeanKitApi.cs" />
+    <Compile Include="ILeanKitClientFactory.cs" />
+    <Compile Include="ILeanKitIntegration.cs" />
+    <Compile Include="ILeanKitIntegrationFactory.cs" />
+    <Compile Include="IRestCommandProcessor.cs" />
+    <Compile Include="JsonSerializer.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="LeanKitClient.cs" />
+    <Compile Include="LeanKitClientFactory.cs" />
+    <Compile Include="LeanKitIntegration.cs" />
+    <Compile Include="IntegrationSettings.cs" />
+    <Compile Include="LeanKitIntegrationFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RestSharpCommandProcessor.cs" />
+    <Compile Include="TransferObjects\Activity.cs" />
+    <Compile Include="TransferObjects\Archive.cs" />
+    <Compile Include="TransferObjects\AssignedUserInfo.cs" />
+    <Compile Include="TransferObjects\AsynchResponse.cs" />
+    <Compile Include="TransferObjects\BlockedStatus.cs" />
+    <Compile Include="TransferObjects\Board.cs" />
+    <Compile Include="TransferObjects\BoardHistoryEvent.cs" />
+    <Compile Include="TransferObjects\BoardIdentifiers.cs" />
+    <Compile Include="TransferObjects\BoardListing.cs" />
+    <Compile Include="TransferObjects\BoardRole.cs" />
+    <Compile Include="TransferObjects\BoardUpdates.cs" />
+    <Compile Include="TransferObjects\Card.cs" />
+    <Compile Include="TransferObjects\CardContext.cs" />
+    <Compile Include="TransferObjects\CardEvent.cs" />
+    <Compile Include="TransferObjects\CardList.cs" />
+    <Compile Include="TransferObjects\CardType.cs" />
+    <Compile Include="TransferObjects\CardView.cs" />
+    <Compile Include="TransferObjects\ClassOfService.cs" />
+    <Compile Include="TransferObjects\Comment.cs" />
+    <Compile Include="TransferObjects\CreateTaskboardCommand.cs" />
+    <Compile Include="TransferObjects\Taskboard.cs" />
+    <Compile Include="TransferObjects\TaskboardCreateResult.cs" />
+    <Compile Include="TransferObjects\HierarchicalLane.cs" />
+    <Compile Include="TransferObjects\Lane.cs" />
+    <Compile Include="TransferObjects\LeanKitAccountAuth.cs" />
+    <Compile Include="TransferObjects\ParentCard.cs" />
+    <Compile Include="TransferObjects\ResponseCode.cs" />
+    <Compile Include="TransferObjects\SearchOptions.cs" />
+    <Compile Include="TransferObjects\TaskboardDeleteResult.cs" />
+    <Compile Include="TransferObjects\TaskboardTemplateType.cs" />
+    <Compile Include="TransferObjects\UserAssignmentDTO.cs" />
+    <Compile Include="TransferObjects\User.cs" />
+    <Compile Include="Validation\DomainIdentityValidationAttribute.cs" />
+    <Compile Include="Validation\ValidationResult.cs" />
+    <Compile Include="Validation\ValidationService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
