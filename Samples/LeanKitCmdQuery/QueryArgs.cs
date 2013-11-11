@@ -1,4 +1,10 @@
-﻿using PowerArgs;
+﻿//------------------------------------------------------------------------------
+// <copyright company="LeanKit Inc.">
+//     Copyright (c) LeanKit Inc.  All rights reserved.
+// </copyright> 
+//------------------------------------------------------------------------------
+
+using PowerArgs;
 
 namespace LeanKitCmdQuery
 {

@@ -1,4 +1,10 @@
-﻿using System.Linq;
+﻿//------------------------------------------------------------------------------
+// <copyright company="LeanKit Inc.">
+//     Copyright (c) LeanKit Inc.  All rights reserved.
+// </copyright> 
+//------------------------------------------------------------------------------
+
+using System.Linq;
 using AutoMapper;
 using LeanKit.API.Client.Library.TransferObjects;
 
