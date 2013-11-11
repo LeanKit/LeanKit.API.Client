@@ -1,21 +1,21 @@
+#r "LeanKit.API.Client.Library.dll"
+#load "CardModel.csx"
+
 //------------------------------------------------------------------------------
 // <copyright company="LeanKit Inc.">
 //     Copyright (c) LeanKit Inc.  All rights reserved.
 // </copyright> 
 //------------------------------------------------------------------------------
 
-#r "LeanKit.API.Client.Library.dll"
-#load "CardModel.csx"
-
 using LeanKit.API.Client.Library;
 using LeanKit.API.Client.Library.TransferObjects;
 using System.Collections.Generic;
 using System.Linq;
 
-var host = "hostname";             // Change to your account name
+var host = "accountname";          // Change to your account name, e.g. https://accountname.leankit.com
 var userName = "user@email.com";   // Change to your account email address
-var password = "p@ssw0rd";         // Change to your account password
-var boardId = 101;                 // Change to your board ID
+var password = "p@ssword";         // Change to your account password
+var boardId = 101;                 // Change to your board ID, e.g. https://accountname.leankit.com/Boards/View/101
 
 var leanKitAuth = new LeanKitAccountAuth {
 		Hostname = host,
