@@ -20,3 +20,9 @@ Usage: LeanKitCmdQuery options
    EXAMPLE: LeanKitCmdQuery -h [account name] -u [email] -p [password] [-b [board id]]
    Query LeanKit and output results to console.
 ```
+
+To export all the cards on a board and save as a comma-delimited (.csv) file:
+
+```
+LeanKitCmdQuery -h accountname -u email@address.com -p p@ssw0rd -b 101 -cards -backlog -archive -csv > cards.csv
+```
