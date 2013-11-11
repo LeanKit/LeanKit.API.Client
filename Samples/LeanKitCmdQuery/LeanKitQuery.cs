@@ -86,6 +86,12 @@ namespace LeanKitCmdQuery
 						{
 							cards.AddRange(lane.Cards.Select(Mapper.Map<MappedCardView>));
 						}
+						// Archived cards is a separate API call
+						if (_args.IncludeArchive)
+						{
+							var archivedCards = api.GetArchiveCards(_args.Board);
+							cards.AddRange(archivedCards.Select(Mapper.Map<MappedCardView>));
+						}
 						var output = _args.Csv ? cards.ToCsv() : _args.Json ? cards.ToJson() : cards.Dump();
 						Console.WriteLine(output);
 					}
