@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LeanKitCmdQuery</RootNamespace>
     <AssemblyName>LeanKitCmdQuery</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,16 +35,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
+    <Reference Include="AutoMapper, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper.Net4">
+    <Reference Include="AutoMapper.Net4, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
-    <Reference Include="PowerArgs">
+    <Reference Include="PowerArgs, Version=2.0.3.0, Culture=neutral, PublicKeyToken=54832990a0812961, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\PowerArgs.2.0.3.0\lib\net40\PowerArgs.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Text">
+    <Reference Include="ServiceStack.Text, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />

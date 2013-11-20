@@ -12,7 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{4745A8
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
-		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{F10B42DD-2F42-45D9-B4AF-98CA6660CA4F}"
