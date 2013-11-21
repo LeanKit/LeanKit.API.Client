@@ -12,7 +12,7 @@ namespace LeanKit.API.Client.Library.TransferObjects
 	{
 		public LeanKitAccountAuth()
 		{
-			UrlTemplateOverride = ConfigurationManager.AppSettings["UrlTemplateOverride"] ?? "https://{0}.leankitLeanKit.com";
+			UrlTemplateOverride = ConfigurationManager.AppSettings["UrlTemplateOverride"] ?? "https://{0}.leankit.com";
 		}
 
 		public string Username { get; set; }
