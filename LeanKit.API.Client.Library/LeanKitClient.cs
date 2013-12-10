@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright company="LeanKit Inc.">
 //     Copyright (c) LeanKit Inc.  All rights reserved.
 // </copyright> 
@@ -64,7 +64,7 @@ namespace LeanKit.API.Client.Library
 	///         </item>
 	///     </list>
 	///     The library will require the HostName(or URL) used by your organization to connect to LeanKit Kanban (ex. -
-	///     https://acme.leankitLeanKit.com)
+	///     https://acme.leankit.com)
 	///     as well as valid account credentials (UserName and Password) used for the organization.
 	/// </remarks>
 	[CompilerGenerated]
