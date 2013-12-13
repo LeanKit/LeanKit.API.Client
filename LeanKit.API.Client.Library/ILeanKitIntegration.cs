@@ -37,14 +37,37 @@ namespace LeanKit.API.Client.Library
 		void MoveCard(long cardId, long toLaneId, int position, string wipOverrideReason);
 		void MoveCard(long cardId, long toLaneId, int position);
 		IEnumerable<CardView> SearchCards(SearchOptions options);
+
+		Taskboard GetTaskboard(long cardId);
+		void AddTask(Card task, long cardId);
+		void AddTask(Card task, long cardId, string wipOverrideReason);
+		void UpdateTask(Card task, long cardId);
+		void UpdateTask(Card task, long cardId, string wipOverrideReason);
+		void DeleteTask(long taskId, long cardId);
+		void MoveTask(long taskId, long cardId, long toLaneId, int position);
+		void MoveTask(long taskId, long cardId, long toLaneId, int position, string wipOverrideReason);
+
+		#region obsolete
+
+		[Obsolete("Creating taskboards is no longer supported", true)]
 		void CreateTaskboard(long cardId, TaskboardTemplateType templateType, long cardContextId);
+		[Obsolete("Deleting taskboards is no longer supported", true)]
 		void DeleteTaskboard(long cardId, long taskboardId);
+		[Obsolete("Use AddTask instead")]
 		void AddTaskboardCard(Card card, long taskboardId);
+		[Obsolete("Use AddTask instead")]
 		void AddTaskboardCard(Card card, long taskboardId, string wipOverrideReason);
+		[Obsolete("Use UpdateTask instead")]
 		void UpdateTaskboardCard(Card card, long taskboardId);
+		[Obsolete("Use UpdateTask instead")]
 		void UpdateTaskboardCard(Card card, long taskboardId, string wipOverrideReason);
+		[Obsolete("Use DeleteTask instead")]
 		void DeleteTaskboardCard(long cardId, long taskboardId);
+		[Obsolete("Use MoveTask instead")]
 		void MoveTaskboardCard(long cardId, long taskboardId, long toLaneId, int position, string wipOverrideReason);
-		void MoveTaskbordCard(long cardId, long taskboardId, long toLaneId, int position);
+		[Obsolete("Use MoveTask instead")]
+		void MoveTaskboardCard(long cardId, long taskboardId, long toLaneId, int position);
+
+		#endregion
 	}
 }

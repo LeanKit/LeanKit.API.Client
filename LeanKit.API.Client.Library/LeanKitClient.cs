@@ -290,42 +290,122 @@ namespace LeanKit.API.Client.Library
 			return _restCommandProcessor.Get<List<CardView>>(_accountAuth, resource, options);
 		}
 
+		public IEnumerable<CardList> ListNewCards(long boardId) 
+		{
+			var resource = string.Format("/Kanban/Api/Board/{0}/ListNewCards",
+				boardId);
+			return _restCommandProcessor.Get<List<CardList>>(_accountAuth, resource);
+		}
+
+		public CardMoveBetweenBoardsResult MoveCardToAnotherBoard(long cardId, long destBoardId) 
+		{
+			//http://kanban-cibuild.leankit.local/kanban/API/Card/MoveCardToAnotherBoard/7/101
+			var resource = string.Format("/Kanban/Api/Card/MoveCardToAnotherBoard/{0}/{1}", cardId, destBoardId);
+			return _restCommandProcessor.Post<CardMoveBetweenBoardsResult>(_accountAuth, resource);
+		}
+
 		#endregion
 
 		#region Taskboard methods
 
-		public Taskboard GetTaskboard(long boardId, long taskboardId)
+		public Taskboard GetTaskboardById(long boardId, long taskboardId)
 		{
 			var resource = "/Kanban/API/Board/" + boardId + "/TaskBoard/" + taskboardId + "/Get/";
 			return _restCommandProcessor.Get<Taskboard>(_accountAuth, resource);
 		}
 
+		public Taskboard GetTaskboard(long boardId, long cardId)
+		{
+			var resource = "/Kanban/API/v1/Board/" + boardId + "/Card/" + cardId + "/Taskboard";
+			return _restCommandProcessor.Get<Taskboard>(_accountAuth, resource);
+		}
+
+		public CardAddResult AddTask(long boardId, long cardId, Card newTask)
+		{
+			return AddTask(boardId, cardId, newTask, DefaultOverrideReason);
+		}
+
+		public CardAddResult AddTask(long boardId, long cardId, Card newTask, string wipOverrideReason)
+		{
+			var resource = string.Format("/Kanban/Api/v1/Board/{0}/Card/{1}/Tasks/Lane/{2}/Position/{3}",
+				boardId, cardId, newTask.LaneId, newTask.Index);
+			newTask.UserWipOverrideComment = wipOverrideReason;
+			return _restCommandProcessor.Post<CardAddResult>(_accountAuth, resource, newTask);
+		}
+
+		public CardUpdateResult UpdateTask(long boardId, long cardId, Card updatedTask)
+		{
+			return UpdateTask(boardId, cardId, updatedTask, DefaultOverrideReason);
+		}
+
+		public CardUpdateResult UpdateTask(long boardId, long cardId, Card updatedTask, string wipOverrideReason)
+		{
+			var resource = string.Format("/Kanban/Api/v1/Board/{0}/Update/Card/{1}/Tasks/{2}", boardId, cardId, updatedTask.Id);
+			updatedTask.UserWipOverrideComment = wipOverrideReason;
+			return _restCommandProcessor.Post<CardUpdateResult>(_accountAuth, resource, updatedTask);
+		}
+
+		public long DeleteTask(long boardId, long cardId, long taskId)
+		{
+			var resource = string.Format("/Kanban/Api/v1/Board/{0}/Delete/Card/{1}/Tasks/{2}", boardId, cardId, taskId);
+			return _restCommandProcessor.Post<long>(_accountAuth, resource);			
+		}
+
+		public BoardUpdates CheckCardForTaskUpdates(long boardId, long cardId, long boardVersion)
+		{
+			var resource = string.Format("/Kanban/Api/v1/Board/{0}/Card/{1}/Tasks/BoardVersion/{2}",
+				boardId, cardId, boardVersion);
+			return _restCommandProcessor.Get<BoardUpdates>(_accountAuth, resource);
+		}
+
+		public CardMoveResult MoveTask(long boardId, long cardId, long taskId, long toLaneId, int position)
+		{
+			return MoveTask(boardId, cardId, taskId, toLaneId, position, DefaultOverrideReason);
+		}
+
+		public CardMoveResult MoveTask(long boardId, long cardId, long taskId, long toLaneId, int position, string wipOverrideReason)
+		{
+			var resource =
+				string.Format("/Kanban/Api/v1/Board/{0}/Move/Card/{1}/Tasks/{2}/Lane/{3}/Position/{4}", boardId,
+					cardId, taskId, toLaneId, position);
+			return _restCommandProcessor.Post<CardMoveResult>(_accountAuth, resource,
+				new { Comment = (string.IsNullOrEmpty(wipOverrideReason) ? DefaultOverrideReason : wipOverrideReason) });
+		}
+
+		#region Obsolete
+
+		[Obsolete("Creating taskboards is no longer supported", true)]
 		public TaskboardCreateResult CreateTaskboard(long boardId, long containingCardId, TaskboardTemplateType templateType,
-			long cardContextId)
-		{
-			var cmd = new CreateTaskBoardCommand
-			{
-				BoardId = boardId,
-				CardContextId = cardContextId,
-				ContainingCardId = containingCardId,
-				TemplateId = (long) templateType
-			};
+			long cardContextId) {
+			//var cmd = new CreateTaskBoardCommand
+			//{
+			//	BoardId = boardId,
+			//	CardContextId = cardContextId,
+			//	ContainingCardId = containingCardId,
+			//	TemplateId = (long) templateType
+			//};
 
-			var resource = "/Kanban/Api/TaskBoard/Create";
-			return _restCommandProcessor.Post<TaskboardCreateResult>(_accountAuth, resource, cmd);
+			//var resource = "/Kanban/Api/TaskBoard/Create";
+			//return _restCommandProcessor.Post<TaskboardCreateResult>(_accountAuth, resource, cmd);
+
+			throw new NotImplementedException("Creating taskboards is no longer supported");
 		}
 
-		public TaskboardDeleteResult DeleteTaskboard(long boardId, long taskBoardId)
-		{
-			var resource = string.Format("/Kanban/API/Board/{0}/TaskBoard/{1}/Delete/", boardId, taskBoardId);
-			return _restCommandProcessor.Post<TaskboardDeleteResult>(_accountAuth, resource);
+		[Obsolete("Deleting taskboards is no longer supported", true)]
+		public TaskboardDeleteResult DeleteTaskboard(long boardId, long taskBoardId) {
+			//var resource = string.Format("/Kanban/API/Board/{0}/TaskBoard/{1}/Delete/", boardId, taskBoardId);
+			//return _restCommandProcessor.Post<TaskboardDeleteResult>(_accountAuth, resource);
+
+			throw new NotImplementedException("Deleting taskboards is no longer supported");
 		}
 
+		[Obsolete("Use AddTask instead.")]
 		public CardAddResult AddTaskboardCard(long boardId, long taskboardId, Card newCard)
 		{
 			return AddTaskboardCard(boardId, taskboardId, newCard, DefaultOverrideReason);
 		}
 
+		[Obsolete("Use AddTask instead.")]
 		public CardAddResult AddTaskboardCard(long boardId, long taskboardId, Card newCard, string wipOverrideReason)
 		{
 			var resource =
@@ -335,7 +415,8 @@ namespace LeanKit.API.Client.Library
 			return _restCommandProcessor.Post<CardAddResult>(_accountAuth, resource, newCard);
 		}
 
-		public CardUpdateResult UpdateTaskboardCard(long boardId, long taskboardId, Card updatedCard, string wipOverrideReason)
+		[Obsolete("Use UpdateTask instead")]
+		public CardUpdateResult UpdateTaskboardCard(long boardId, long taskboardId, Card updatedCard, string wipOverrideReason) 
 		{
 			var resource = string.Format("/Kanban/Api/Board/{0}/TaskBoard/{1}/UpdateCardWithWipOverrideLite", boardId,
 				taskboardId);
@@ -343,52 +424,44 @@ namespace LeanKit.API.Client.Library
 			return _restCommandProcessor.Post<CardUpdateResult>(_accountAuth, resource, updatedCard);
 		}
 
-		public CardUpdateResult UpdateTaskboardCard(long boardId, long taskboardId, Card updatedCard)
+		[Obsolete("Use UpdateTask instead")]
+		public CardUpdateResult UpdateTaskboardCard(long boardId, long taskboardId, Card updatedCard) 
 		{
 			return UpdateTaskboardCard(boardId, taskboardId, updatedCard, DefaultOverrideReason);
 		}
 
-		public long DeleteTaskboardCard(long boardId, long taskboardId, long cardId)
+		[Obsolete("Use DeleteTask instead")]
+		public long DeleteTaskboardCard(long boardId, long taskboardId, long cardId) 
 		{
 			var resource = string.Format("/Kanban/Api/Board/{0}/TaskBoard/{1}/DeleteLite/{2}", boardId, taskboardId, cardId);
 			return _restCommandProcessor.Post<long>(_accountAuth, resource);
 		}
 
-		public CardMoveResult MoveTaskboardCard(long boardId, long taskboardId, long cardId, long toLaneId, int position,
-			string wipOverrideReason)
-		{
-			var resource =
-				string.Format("/Kanban/Api/Board/{0}/TaskBoard/{1}/MoveCardWithWipOverrideLite/{2}/Lane/{3}/Position/{4}", boardId,
-					taskboardId, cardId, toLaneId, position);
-			return _restCommandProcessor.Post<CardMoveResult>(_accountAuth, resource,
-				new {Comment = (string.IsNullOrEmpty(wipOverrideReason) ? DefaultOverrideReason : wipOverrideReason)});
-		}
-
-		public CardMoveResult MoveTaskboardCard(long boardId, long taskboardId, long cardId, long toLaneId, int position)
-		{
-			return MoveTaskboardCard(boardId, taskboardId, cardId, toLaneId, position, DefaultOverrideReason);
-		}
-
-		public IEnumerable<CardList> ListNewCards(long boardId)
-		{
-			var resource = string.Format("/Kanban/Api/Board/{0}/ListNewCards",
-				boardId);
-			return _restCommandProcessor.Get<List<CardList>>(_accountAuth, resource);
-		}
-
-		public CardMoveBetweenBoardsResult MoveCardToAnotherBoard(long cardId, long destBoardId)
-		{
-			//http://kanban-cibuild.leankit.local/kanban/API/Card/MoveCardToAnotherBoard/7/101
-			var resource = string.Format("/Kanban/Api/Card/MoveCardToAnotherBoard/{0}/{1}", cardId, destBoardId);
-			return _restCommandProcessor.Post<CardMoveBetweenBoardsResult>(_accountAuth, resource);
-		}
-
-		public BoardUpdates CheckForTaskboardUpdates(long boardId, long taskBoardId, long taskBoardVersion)
+		[Obsolete("Use CheckCardForTaskUpdates instead")]
+		public BoardUpdates CheckForTaskboardUpdates(long boardId, long taskBoardId, long taskBoardVersion) 
 		{
 			var resource = string.Format("/Kanban/Api/Board/{0}/TaskBoard/{1}/BoardVersion/{2}/CheckForUpdates",
 				boardId, taskBoardId, taskBoardVersion);
 			return _restCommandProcessor.Get<BoardUpdates>(_accountAuth, resource);
 		}
+
+		[Obsolete("Use MoveTask instead")]
+		public CardMoveResult MoveTaskboardCard(long boardId, long taskboardId, long cardId, long toLaneId, int position, string wipOverrideReason) 
+		{
+			var resource =
+				string.Format("/Kanban/Api/Board/{0}/TaskBoard/{1}/MoveCardWithWipOverrideLite/{2}/Lane/{3}/Position/{4}", boardId,
+					taskboardId, cardId, toLaneId, position);
+			return _restCommandProcessor.Post<CardMoveResult>(_accountAuth, resource,
+				new { Comment = (string.IsNullOrEmpty(wipOverrideReason) ? DefaultOverrideReason : wipOverrideReason) });
+		}
+
+		[Obsolete("Use MoveTask instead")]
+		public CardMoveResult MoveTaskboardCard(long boardId, long taskboardId, long cardId, long toLaneId, int position) 
+		{
+			return MoveTaskboardCard(boardId, taskboardId, cardId, toLaneId, position, DefaultOverrideReason);
+		}
+
+		#endregion
 
 		#endregion
 

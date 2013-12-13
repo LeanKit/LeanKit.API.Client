@@ -4,6 +4,7 @@
 // </copyright> 
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using LeanKit.API.Client.Library.TransferObjects;
 
@@ -14,7 +15,6 @@ namespace LeanKit.API.Client.Library
 		IEnumerable<BoardListing> GetBoards();
 		IEnumerable<BoardListing> ListNewBoards();
 		Board GetBoard(long boardId);
-		Taskboard GetTaskboard(long boardId, long taskboardId);
 		IEnumerable<Lane> GetBacklogLanes(long boardId);
 		IEnumerable<HierarchicalLane> GetArchiveLanes(long boardId);
 		IEnumerable<CardView> GetArchiveCards(long boardId);
@@ -43,23 +43,45 @@ namespace LeanKit.API.Client.Library
 		int PostCommentByExternalId(long boardId, string externalId, Comment comment);
 		IEnumerable<CardEvent> GetCardHistory(long boardId, long cardId);
 		IEnumerable<CardView> SearchCards(long boardId, SearchOptions options);
-
-		TaskboardCreateResult CreateTaskboard(long boardId, long containingCardId, TaskboardTemplateType templateType,
-			long cardContextId);
-
-		TaskboardDeleteResult DeleteTaskboard(long boardId, long taskboardId);
-		CardAddResult AddTaskboardCard(long boardId, long taskboardId, Card newCard);
-		CardAddResult AddTaskboardCard(long boardId, long taskboardId, Card newCard, string wipOverrideReason);
-		CardUpdateResult UpdateTaskboardCard(long boardId, long taskboardId, Card updatedCard, string wipOverrideReason);
-		CardUpdateResult UpdateTaskboardCard(long boardId, long taskboardId, Card updatedCard);
-		long DeleteTaskboardCard(long boardId, long taskboardId, long cardId);
-
-		CardMoveResult MoveTaskboardCard(long boardId, long taskboardId, long cardId, long toLaneId, int position,
-			string wipOverrideReason);
-
-		CardMoveResult MoveTaskboardCard(long boardId, long taskboardId, long cardId, long toLaneId, int position);
 		IEnumerable<CardList> ListNewCards(long boardId);
 		CardMoveBetweenBoardsResult MoveCardToAnotherBoard(long cardId, long destBoardId);
 		User GetCurrentUser(long boardId);
+
+		Taskboard GetTaskboardById(long boardId, long taskboardId);
+		Taskboard GetTaskboard(long boardId, long cardId);
+		CardAddResult AddTask(long boardId, long cardId, Card newTask);
+		CardAddResult AddTask(long boardId, long cardId, Card newTask, string wipOverrideReason);
+		CardUpdateResult UpdateTask(long boardId, long cardId, Card updatedTask);
+		CardUpdateResult UpdateTask(long boardId, long cardId, Card updatedTask, string wipOverrideReason);
+		long DeleteTask(long boardId, long cardId, long taskId);
+		CardMoveResult MoveTask(long boardId, long cardId, long taskId, long toLaneId, int position);
+		CardMoveResult MoveTask(long boardId, long cardId, long taskId, long toLaneId, int position, string wipOverrideReason);
+
+		#region Obsolete
+	
+		[Obsolete("Creating taskboards is no longer supported", true)]
+		TaskboardCreateResult CreateTaskboard(long boardId, long containingCardId, TaskboardTemplateType templateType, long cardContextId);
+		[Obsolete("Deleting taskboards is no longer supported", true)]
+		TaskboardDeleteResult DeleteTaskboard(long boardId, long taskboardId);
+
+		[Obsolete("Use AddTask instead")]
+		CardAddResult AddTaskboardCard(long boardId, long taskboardId, Card newCard);
+		[Obsolete("Use AddTask instead")]
+		CardAddResult AddTaskboardCard(long boardId, long taskboardId, Card newCard, string wipOverrideReason);
+		[Obsolete("Use UpdateTask instead")]
+		CardUpdateResult UpdateTaskboardCard(long boardId, long taskboardId, Card updatedCard, string wipOverrideReason);
+		[Obsolete("Use UpdateTask instead")]
+		CardUpdateResult UpdateTaskboardCard(long boardId, long taskboardId, Card updatedCard);
+		[Obsolete("Use DeleteTask instead")]
+		long DeleteTaskboardCard(long boardId, long taskboardId, long cardId);
+		[Obsolete("Use MoveTask instead")]
+		CardMoveResult MoveTaskboardCard(long boardId, long taskboardId, long cardId, long toLaneId, int position,
+			string wipOverrideReason);
+		[Obsolete("Use MoveTask instead")]
+		CardMoveResult MoveTaskboardCard(long boardId, long taskboardId, long cardId, long toLaneId, int position);
+
+		#endregion
+
+
 	}
 }

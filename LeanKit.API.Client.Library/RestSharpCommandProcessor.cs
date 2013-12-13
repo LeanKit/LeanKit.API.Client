@@ -116,7 +116,7 @@ namespace LeanKit.API.Client.Library
 				{
 					return response;
 				}
-				catch (Exception ex)
+				catch (Exception)
 				{
 					if (tryCount == 10) throw;
 					Thread.Sleep(1000);

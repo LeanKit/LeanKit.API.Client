@@ -37,7 +37,6 @@ namespace LeanKit.API.Client.Library
 		private readonly IntegrationSettings _integrationSettings = new IntegrationSettings();
 		private Board _board;
 		private bool _includeTaskboards;
-		private List<Taskboard> _taskboards;
 
 		public LeanKitIntegration(long boardId, ILeanKitApi apiClient)
 		{
@@ -738,133 +737,202 @@ namespace LeanKit.API.Client.Library
 			return _api.SearchCards(_board.Id, options);
 		}
 
-		public void CreateTaskboard(long cardId, TaskboardTemplateType templateType, long cardContextId)
+		public Taskboard GetTaskboard(long cardId)
 		{
-			_boardLock.EnterUpgradeableReadLock();
-			try
-			{
-				var card = _board.GetCardById(cardId);
-
-				if (card.CardContexts.Any(cc => cc.Id == cardContextId))
-				{
-					throw new DuplicateItemException("A taskboard already exists for this Card Context.");
-				}
-
-				_boardLock.EnterWriteLock();
-				try
-				{
-					var result = _api.CreateTaskboard(_board.Id, cardId, templateType, cardContextId);
-					_board.Version = result.BoardVersion;
-				}
-				finally
-				{
-					_boardLock.ExitWriteLock();
-				}
-			}
-			finally
-			{
-				_boardLock.ExitUpgradeableReadLock();
-			}
+			return _api.GetTaskboard(_boardId, cardId);
 		}
 
-		public void DeleteTaskboard(long cardId, long taskboardId)
+		public void AddTask(Card task, long cardId)
 		{
-			_boardLock.EnterUpgradeableReadLock();
-			try
-			{
-				var card = _board.GetCardById(cardId);
-
-				if (card.CardContexts.All(cc => cc.TaskBoardId != taskboardId))
-				{
-					throw new ItemNotFoundException(string.Format("Could not find the Taskboard [{0}] for the Card [{1}].", taskboardId, cardId));
-				}
-
-				_boardLock.EnterWriteLock();
-				try
-				{
-					//TODO:  need to determine how to handle taskboards, how to apply the change
-					var result = _api.DeleteTaskboard(_board.Id, taskboardId);
-					_board.Version = result.BoardVersion;
-				}
-				finally
-				{
-					_boardLock.ExitWriteLock();
-				}
-			}
-			finally
-			{
-				_boardLock.ExitUpgradeableReadLock();
-			}
+			AddTask(task, cardId, string.Empty);
 		}
 
-		public void AddTaskboardCard(Card card, long taskboardId)
+		public void AddTask(Card task, long cardId, string wipOverrideReason)
 		{
+			var results = string.IsNullOrEmpty(wipOverrideReason)
+				? _api.AddTask(_boardId, cardId, task)
+				: _api.AddTask(_boardId, cardId, task, wipOverrideReason);
+
+			_boardLock.EnterWriteLock();
+			try {
+				//TODO:  Figure out what to do for taskboards
+				//ApplyBoardChanges(results.BoardVersion, new[] {results.Lane});
+			} finally {
+				_boardLock.ExitWriteLock();
+			}			
+		}
+
+		public void UpdateTask(Card task, long cardId)
+		{
+			UpdateTask(task, cardId, string.Empty);
+		}
+
+		public void UpdateTask(Card task, long cardId, string wipOverrideReason)
+		{
+			var results = string.IsNullOrEmpty(wipOverrideReason)
+				? _api.UpdateTask(_boardId, cardId, task)
+				: _api.UpdateTask(_boardId, cardId, task, wipOverrideReason);
+
+			//TODO: Figure out how to handle taskboards
+			//            CardView cardView = results.CardDTO;
+			//            Lane lane = _board.GetLaneById(cardView.LaneId);
+			//
+			//TODO: handle the situation where a card in moved through the Update method
+			//
+			//            _boardLock.EnterWriteLock();
+			//            try {
+			//                lane.UpdateCard(cardView);
+			//                ApplyBoardChanges(results.BoardVersion, new[] { lane });
+			//            }
+			//            finally {
+			//                _boardLock.ExitWriteLock();
+			//            }			
+		}
+
+		public void DeleteTask(long taskId, long cardId)
+		{
+			var results = _api.DeleteTask(_boardId, cardId, taskId);
+			//TODO: Figure out how to handle taskboards
+		}
+
+		public void MoveTask(long taskId, long cardId, long toLaneId, int position)
+		{
+			MoveTask(taskId, cardId, toLaneId, position, string.Empty);			
+		}
+
+		public void MoveTask(long taskId, long cardId, long toLaneId, int position, string wipOverrideReason)
+		{
+			var results = _api.MoveTask(_boardId, cardId, taskId, toLaneId, position, wipOverrideReason);
+			//TODO: Figure out how to handle taskboards
+		}
+
+		#region obsolete
+
+		[Obsolete("Creating taskboards is no longer supported", true)]
+		public void CreateTaskboard(long cardId, TaskboardTemplateType templateType, long cardContextId) {
+			//_boardLock.EnterUpgradeableReadLock();
+			//try
+			//{
+			//	var card = _board.GetCardById(cardId);
+			//
+			//	if (card.CardContexts.Any(cc => cc.Id == cardContextId))
+			//	{
+			//		throw new DuplicateItemException("A taskboard already exists for this Card Context.");
+			//	}
+			//
+			//	_boardLock.EnterWriteLock();
+			//	try
+			//	{
+			//		var result = _api.CreateTaskboard(_board.Id, cardId, templateType, cardContextId);
+			//		_board.Version = result.BoardVersion;
+			//	}
+			//	finally
+			//	{
+			//		_boardLock.ExitWriteLock();
+			//	}
+			//}
+			//finally
+			//{
+			//	_boardLock.ExitUpgradeableReadLock();
+			//}
+			throw new NotImplementedException("Creating taskboards is no longer supported");
+		}
+
+		[Obsolete("Deleting taskboards is no longer supported", true)]
+		public void DeleteTaskboard(long cardId, long taskboardId) {
+			//_boardLock.EnterUpgradeableReadLock();
+			//try
+			//{
+			//	var card = _board.GetCardById(cardId);
+			//
+			//	if (card.CardContexts.All(cc => cc.TaskBoardId != taskboardId))
+			//	{
+			//		throw new ItemNotFoundException(string.Format("Could not find the Taskboard [{0}] for the Card [{1}].", taskboardId, cardId));
+			//	}
+			//
+			//	_boardLock.EnterWriteLock();
+			//	try
+			//	{
+			//		//TODO:  need to determine how to handle taskboards, how to apply the change
+			//		var result = _api.DeleteTaskboard(_board.Id, taskboardId);
+			//		_board.Version = result.BoardVersion;
+			//	}
+			//	finally
+			//	{
+			//		_boardLock.ExitWriteLock();
+			//	}
+			//}
+			//finally
+			//{
+			//	_boardLock.ExitUpgradeableReadLock();
+			//}
+			throw new NotImplementedException("Creating taskboards is no longer supported");
+		}
+
+		[Obsolete("Use AddTask instead")]
+		public void AddTaskboardCard(Card card, long taskboardId) {
 			AddTaskboardCard(card, taskboardId, string.Empty);
 		}
 
-		public void AddTaskboardCard(Card card, long taskboardId, string wipOverrideReason)
-		{
+		[Obsolete("Use AddTask instead")]
+		public void AddTaskboardCard(Card card, long taskboardId, string wipOverrideReason) {
 			var results = string.IsNullOrEmpty(wipOverrideReason)
 				? _api.AddTaskboardCard(_boardId, taskboardId, card)
 				: _api.AddTaskboardCard(_boardId, taskboardId, card, wipOverrideReason);
 
 			_boardLock.EnterWriteLock();
-			try
-			{
+			try {
 				//TODO:  Figure out what to do for taskboards
 				//ApplyBoardChanges(results.BoardVersion, new[] {results.Lane});
-			}
-			finally
-			{
+			} finally {
 				_boardLock.ExitWriteLock();
 			}
 		}
 
-		public void UpdateTaskboardCard(Card card, long taskboardId)
-		{
+		[Obsolete("Use UpdateTask instead")]
+		public void UpdateTaskboardCard(Card card, long taskboardId) {
 			UpdateTaskboardCard(card, taskboardId, string.Empty);
 		}
 
-		public void UpdateTaskboardCard(Card card, long taskboardId, string wipOverrideReason)
-		{
+		[Obsolete("Use UpdateTask instead")]
+		public void UpdateTaskboardCard(Card card, long taskboardId, string wipOverrideReason) {
 			var results = string.IsNullOrEmpty(wipOverrideReason)
 				? _api.UpdateTaskboardCard(_boardId, taskboardId, card)
 				: _api.UpdateTaskboardCard(_boardId, taskboardId, card, wipOverrideReason);
 			//TODO: Figure out how to handle taskboards
 			//            CardView cardView = results.CardDTO;
-//            Lane lane = _board.GetLaneById(cardView.LaneId);
-//
+			//            Lane lane = _board.GetLaneById(cardView.LaneId);
+			//
 			//TODO: handle the situation where a card in moved through the Update method
-//
-//            _boardLock.EnterWriteLock();
-//            try {
-//                lane.UpdateCard(cardView);
-//                ApplyBoardChanges(results.BoardVersion, new[] { lane });
-//            }
-//            finally {
-//                _boardLock.ExitWriteLock();
-//            }
+			//
+			//            _boardLock.EnterWriteLock();
+			//            try {
+			//                lane.UpdateCard(cardView);
+			//                ApplyBoardChanges(results.BoardVersion, new[] { lane });
+			//            }
+			//            finally {
+			//                _boardLock.ExitWriteLock();
+			//            }
 		}
 
-		public void DeleteTaskboardCard(long cardId, long taskboardId)
-		{
+		[Obsolete("Use DeleteTask instead")]
+		public void DeleteTaskboardCard(long cardId, long taskboardId) {
 			throw new NotImplementedException();
 		}
 
+		[Obsolete("Use MoveTask instead")]
 		public void MoveTaskboardCard(long cardId, long taskboardId, long toLaneId, int position, string wipOverrideReason)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void MoveTaskbordCard(long cardId, long taskboardId, long toLaneId, int position)
-		{
-			throw new NotImplementedException();
-		}
-
+		[Obsolete("Use MoveTask instead")]
 		public void MoveTaskboardCard(long cardId, long taskboardId, long toLaneId, int position)
 		{
 			throw new NotImplementedException();
 		}
+
+		#endregion
 
 		#endregion
 	}
