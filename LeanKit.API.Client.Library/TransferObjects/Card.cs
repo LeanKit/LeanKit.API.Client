@@ -46,6 +46,7 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		public virtual bool IsBlocked { get; set; }
 		public virtual string BlockReason { get; set; }
 		public virtual int Index { get; set; }
+		public virtual string StartDate { get; set; }
 		public virtual string DueDate { get; set; }
 		public virtual string UserWipOverrideComment { get; set; }
 		public virtual string ExternalSystemName { get; set; }
@@ -81,6 +82,7 @@ namespace LeanKit.API.Client.Library.TransferObjects
 			cardView.ClassOfServiceId = ClassOfServiceId;
 			cardView.BlockReason = BlockReason;
 			cardView.Description = Description;
+			cardView.StartDate = StartDate;
 			cardView.DueDate = DueDate;
 			cardView.ExternalCardID = ExternalCardID;
 			cardView.ExternalSystemName = ExternalSystemName;
