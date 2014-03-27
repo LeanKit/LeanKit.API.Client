@@ -29,7 +29,7 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		[StringLength(255, ErrorMessage = "Title may have 255 symbols only")]
 		public virtual string Title { get; set; }
 
-		[StringLength(2000, ErrorMessage = "Description may have 2000 symbols only")]
+		[StringLength(20000, ErrorMessage = "Description may not exceed 20000 characters")]
 		public virtual string Description { get; set; }
 
 		public virtual string CreatedOn { get; set; }
