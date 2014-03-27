@@ -50,6 +50,7 @@ namespace LeanKit.API.Client.Library
 		public event EventHandler<BoardStatusCheckedEventArgs> BoardStatusChecked;
 		public event EventHandler<BoardInfoRefreshedEventArgs> BoardInfoRefreshed;
 		public event EventHandler<BoardChangedEventArgs> BoardChanged;
+		public event EventHandler<ClientErrorEventArgs> ClientError;
 
 		public void StartWatching()
 		{
@@ -86,32 +87,30 @@ namespace LeanKit.API.Client.Library
 
 		public virtual void OnBoardStatusChecked(BoardStatusCheckedEventArgs eventArgs)
 		{
-			EventHandler<BoardStatusCheckedEventArgs> eventToRaise = BoardStatusChecked;
-
+			var eventToRaise = BoardStatusChecked;
 			if (eventToRaise != null)
-			{
 				eventToRaise(this, eventArgs);
-			}
 		}
 
 		public virtual void OnBoardRefresh(BoardInfoRefreshedEventArgs eventArgs)
 		{
-			EventHandler<BoardInfoRefreshedEventArgs> eventToRaise = BoardInfoRefreshed;
-
+			var eventToRaise = BoardInfoRefreshed;
 			if (eventToRaise != null)
-			{
 				eventToRaise(this, eventArgs);
-			}
 		}
 
 		public virtual void OnBoardChanged(BoardChangedEventArgs eventArgs)
 		{
-			EventHandler<BoardChangedEventArgs> eventToRaise = BoardChanged;
-
+			var eventToRaise = BoardChanged;
 			if (eventToRaise != null)
-			{
 				eventToRaise(this, eventArgs);
-			}
+		}
+
+		public virtual void OnClientError(ClientErrorEventArgs eventArgs)
+		{
+			var eventToRaise = ClientError;
+			if (eventToRaise != null)
+				eventToRaise(this, eventArgs);
 		}
 
 		private CheckForUpdatesLoopResult SetupCheckForUpdatesLoop()
@@ -121,30 +120,35 @@ namespace LeanKit.API.Client.Library
 				//Sleep the thread until its time to do work
 				Thread.Sleep(_integrationSettings.CheckForUpdatesIntervalSeconds*1000);
 
-				//Now do the work
-				BoardUpdates checkResults = _api.CheckForUpdates(_board.Id, (int) _board.Version);
-
-				if (checkResults != null)
+				try
 				{
+					//Now do the work
+					var checkResults = _api.CheckForUpdates(_board.Id, (int) _board.Version);
+
+					if (checkResults == null) continue;
+
 					OnBoardStatusChecked(new BoardStatusCheckedEventArgs {HasChanges = checkResults.HasUpdates});
 
-					if (checkResults.HasUpdates)
+					if (!checkResults.HasUpdates) continue;
+
+					try
 					{
-						try
+						_boardLock.EnterUpgradeableReadLock();
+
+						var boardChangedEventArgs = new BoardChangedEventArgs();
+
+						if (checkResults.Events.Any(x => x.RequiresBoardRefresh))
 						{
-							_boardLock.EnterUpgradeableReadLock();
-							var boardChangedEventArgs = new BoardChangedEventArgs();
+							boardChangedEventArgs.BoardWasReloaded = true;
+							OnBoardChanged(boardChangedEventArgs);
+							return CheckForUpdatesLoopResult.Continue;
+						}
 
-							if (checkResults.Events.Any(x => x.RequiresBoardRefresh))
-							{
-								boardChangedEventArgs.BoardWasReloaded = true;
-								OnBoardChanged(boardChangedEventArgs);
-								return CheckForUpdatesLoopResult.Continue;
-							}
-
-							//Now we need to spin through and update the board
-							//and create the information to event
-							foreach (BoardHistoryEvent boardEvent in checkResults.Events)
+						//Now we need to spin through and update the board
+						//and create the information to event
+						foreach (var boardEvent in checkResults.Events)
+						{
+							try
 							{
 								switch (GetEventType(boardEvent.EventType))
 								{
@@ -153,7 +157,7 @@ namespace LeanKit.API.Client.Library
 											checkResults.AffectedLanes));
 										break;
 									case EventType.CardMove:
-										CardMoveEvent movedCardEvent = CreateCardMoveEvent(boardEvent, checkResults.AffectedLanes);
+										var movedCardEvent = CreateCardMoveEvent(boardEvent, checkResults.AffectedLanes);
 										if (movedCardEvent != null) boardChangedEventArgs.MovedCards.Add(movedCardEvent);
 										break;
 									case EventType.CardFieldsChanged:
@@ -240,35 +244,59 @@ namespace LeanKit.API.Client.Library
 										break;
 								}
 							}
-
-							OnBoardChanged(boardChangedEventArgs);
-
-							_boardLock.EnterWriteLock();
-							try
+							catch (Exception ex)
 							{
-								//we need to check to see if there is a need to refresh the entire board
-								//if so, we need to refresh the entire board and raise the board refreshed event
-								if (!checkResults.RequiresRefesh())
+								OnClientError(new ClientErrorEventArgs
 								{
-									//since the board does not require a refresh, then just change the effected lanes
-									ApplyBoardChanges(checkResults.CurrentBoardVersion, checkResults.AffectedLanes);
-								}
-								else
-								{
-									_board = checkResults.NewPayload;
-									OnBoardRefresh(new BoardInfoRefreshedEventArgs {FromBoardChange = true});
-								}
+									Exception = ex,
+									Message = "Error processing board change event. " + ex.Message
+								});
 							}
-							finally
+						}
+
+						OnBoardChanged(boardChangedEventArgs);
+
+						_boardLock.EnterWriteLock();
+						try
+						{
+							//we need to check to see if there is a need to refresh the entire board
+							//if so, we need to refresh the entire board and raise the board refreshed event
+							if (!checkResults.RequiresRefesh())
 							{
-								_boardLock.ExitWriteLock();
+								//since the board does not require a refresh, then just change the effected lanes
+								ApplyBoardChanges(checkResults.CurrentBoardVersion, checkResults.AffectedLanes);
 							}
+							else
+							{
+								_board = checkResults.NewPayload;
+								OnBoardRefresh(new BoardInfoRefreshedEventArgs {FromBoardChange = true});
+							}
+						}
+						catch (Exception ex)
+						{
+							OnClientError(new ClientErrorEventArgs
+							{
+								Exception = ex,
+								Message = "Error applying board changes or raising board refresh."
+							});
 						}
 						finally
 						{
-							_boardLock.ExitUpgradeableReadLock();
+							_boardLock.ExitWriteLock();
 						}
 					}
+					catch (Exception ex)
+					{
+						OnClientError(new ClientErrorEventArgs {Exception = ex, Message = "Error processing board events."});
+					}
+					finally
+					{
+						_boardLock.ExitUpgradeableReadLock();
+					}
+				}
+				catch (Exception ex)
+				{
+					OnClientError(new ClientErrorEventArgs {Exception = ex, Message = "Error checking for board events."});
 				}
 			} while (ShouldContinue);
 			return CheckForUpdatesLoopResult.Exit;

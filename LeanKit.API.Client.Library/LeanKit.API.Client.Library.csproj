@@ -59,6 +59,7 @@
     <Compile Include="EventArguments\BoardStatusCheckedEventArgs.cs" />
     <Compile Include="EventArguments\BoardInfoRefreshedEventArgs.cs" />
     <Compile Include="EventArguments\BoardChangedEventArgs.cs" />
+    <Compile Include="EventArguments\ClientErrorEventArgs.cs" />
     <Compile Include="Exceptions\DuplicateItemException.cs" />
     <Compile Include="Exceptions\InvalidAPIResourceException.cs" />
     <Compile Include="Exceptions\ItemNotFoundException.cs" />

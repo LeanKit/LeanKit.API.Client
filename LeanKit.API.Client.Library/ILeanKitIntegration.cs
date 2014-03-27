@@ -17,6 +17,7 @@ namespace LeanKit.API.Client.Library
 		event EventHandler<BoardStatusCheckedEventArgs> BoardStatusChecked;
 		event EventHandler<BoardInfoRefreshedEventArgs> BoardInfoRefreshed;
 		event EventHandler<BoardChangedEventArgs> BoardChanged;
+		event EventHandler<ClientErrorEventArgs> ClientError;
 		void StartWatching();
 		void OnBoardStatusChecked(BoardStatusCheckedEventArgs eventArgs);
 		void OnBoardRefresh(BoardInfoRefreshedEventArgs eventArgs);
