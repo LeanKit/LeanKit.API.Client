@@ -153,60 +153,42 @@ namespace LeanKit.API.Client.Library
 								switch (GetEventType(boardEvent.EventType))
 								{
 									case EventType.CardCreation:
-										boardChangedEventArgs.AddedCards.Add(CreatCardAddEvent(boardEvent,
-											checkResults.AffectedLanes));
+										var addCardEvent = CreateCardAddEvent(boardEvent, checkResults.AffectedLanes);
+										if (addCardEvent != null) boardChangedEventArgs.AddedCards.Add(addCardEvent);
 										break;
 									case EventType.CardMove:
 										var movedCardEvent = CreateCardMoveEvent(boardEvent, checkResults.AffectedLanes);
 										if (movedCardEvent != null) boardChangedEventArgs.MovedCards.Add(movedCardEvent);
 										break;
 									case EventType.CardFieldsChanged:
-										boardChangedEventArgs.UpdatedCards.Add(CreatCardUpdateEvent(boardEvent,
-											checkResults.
-												AffectedLanes));
+										boardChangedEventArgs.UpdatedCards.Add(CreateCardUpdateEvent(boardEvent, 
+											checkResults.AffectedLanes));
 										break;
 									case EventType.CardDeleted:
-										boardChangedEventArgs.DeletedCards.Add(CreateCardDeletedEvent(boardEvent,
-											checkResults.
-												AffectedLanes));
+										boardChangedEventArgs.DeletedCards.Add(CreateCardDeletedEvent(boardEvent));
 										break;
 									case EventType.CardBlocked:
 										if (boardEvent.IsBlocked)
-										{
-											boardChangedEventArgs.BlockedCards.Add(CreatCardBlockedEvent(boardEvent,
-												checkResults.
-													AffectedLanes));
-										}
+											boardChangedEventArgs.BlockedCards.Add(CreateCardBlockedEvent(boardEvent,
+												checkResults.AffectedLanes));
 										else
-										{
 											boardChangedEventArgs.UnBlockedCards.Add(CreateCardUnBlockedEvent(boardEvent,
-												checkResults.
-													AffectedLanes));
-										}
-
+												checkResults.AffectedLanes));
 										break;
 									case EventType.UserAssignment:
 										if (boardEvent.IsUnassigning)
-										{
-											boardChangedEventArgs.UnAssignedUsers.Add(
-												CreateCardUserUnAssignmentEvent(boardEvent,
-													checkResults.AffectedLanes));
-										}
-										else
-										{
-											boardChangedEventArgs.AssignedUsers.Add(CreateCardUserAssignmentEvent(
-												boardEvent,
+											boardChangedEventArgs.UnAssignedUsers.Add(CreateCardUserUnAssignmentEvent(boardEvent, 
 												checkResults.AffectedLanes));
-										}
+										else
+											boardChangedEventArgs.AssignedUsers.Add(CreateCardUserAssignmentEvent(boardEvent, 
+												checkResults.AffectedLanes));
 										break;
 									case EventType.CommentPost:
 										boardChangedEventArgs.PostedComments.Add(CreateCommentPostedEvent(boardEvent));
-
 										break;
 									case EventType.WipOverride:
-										boardChangedEventArgs.WipOverrides.Add(CreateWipOverrideEvent(boardEvent,
-											checkResults.
-												AffectedLanes));
+										boardChangedEventArgs.WipOverrides.Add(CreateWipOverrideEvent(boardEvent, 
+											checkResults.AffectedLanes));
 										break;
 									case EventType.UserWipOverride:
 										boardChangedEventArgs.UserWipOverrides.Add(CreateUserWipOverrideEvent(boardEvent));
@@ -312,7 +294,7 @@ namespace LeanKit.API.Client.Library
 			}
 		}
 
-		private static CardBlockedEvent CreatCardBlockedEvent(BoardHistoryEvent boardEvent, IEnumerable<Lane> affectedLanes)
+		private static CardBlockedEvent CreateCardBlockedEvent(BoardHistoryEvent boardEvent, IEnumerable<Lane> affectedLanes)
 		{
 			//Get the effected lanes from the original board
 			var card = affectedLanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
@@ -421,7 +403,7 @@ namespace LeanKit.API.Client.Library
 			return new CardMoveFromBoardEvent(boardEvent.EventDateTime, boardEvent.CardId, boardEvent.FromLaneId);
 		}
 
-		private CardDeletedEvent CreateCardDeletedEvent(BoardHistoryEvent boardEvent, IEnumerable<Lane> affectedLanes)
+		private CardDeletedEvent CreateCardDeletedEvent(BoardHistoryEvent boardEvent)
 		{
 			// Temporarily removed. Breaks every time.
 			// Get the effected lanes from the original board
@@ -434,37 +416,35 @@ namespace LeanKit.API.Client.Library
 		{
 			try
 			{
-				long fromLaneId = boardEvent.FromLaneId.GetValueOrDefault();
-				IList<Lane> lanes = affectedLanes as IList<Lane> ?? affectedLanes.ToList();
+				// Is the card being moved in or to a taskboard?
+				if (!_board.AllLanes().ContainsLane(boardEvent.ToLaneId) && !_includeTaskboards)
+					return null;
 
-				//if the from lane is not contained in the affected lanes, then it is probably 
-				//an archive lane, so look in there
-				Lane fromLane = lanes.ContainsLane(fromLaneId)
-					? lanes.FindLane(fromLaneId)
-					: (_board.Archive.ContainsLane(fromLaneId))
-						? _board.Archive.FindLane(fromLaneId)
-						: null;
+				var fromLaneId = boardEvent.FromLaneId.GetValueOrDefault();
+				var toLaneId = boardEvent.ToLaneId;
+				var lanes = affectedLanes as IList<Lane> ?? affectedLanes.ToList();
+
+				var fromLane = _board.AllLanes().ContainsLane(fromLaneId)
+					? _board.AllLanes().FindLane(fromLaneId)
+					: null;
 
 				Lane toLane = null;
-				CardView affectedCardView;
-				long toLaneId = boardEvent.ToLaneId;
+				CardView affectedCardView = null;
 				if (lanes.ContainsLane(toLaneId))
 				{
 					toLane = lanes.FindLane(toLaneId);
 					affectedCardView = toLane.Cards.FirstOrDefault(aCard => aCard.Id == boardEvent.CardId);
 				}
-				else
+				else if (_board.Archive.ContainsLane(toLaneId))
 				{
-					//must be getting moved to the archive.  
-					//if so, we need to retrieve the card through the API
-					if (_board.Archive.ContainsLane(toLaneId)) toLane = _board.Archive.FindLane(toLaneId);
+					toLane = _board.Archive.FindLane(toLaneId);
 					affectedCardView = GetCard(boardEvent.CardId).ToCardView();
 				}
 
 				// If fromLane or toLane are null, then the card is probably on a taskboard
 				if (affectedCardView == null || (toLane == null && !_includeTaskboards)) return null;
 
-				Card card = affectedCardView.ToCard();
+				var card = affectedCardView.ToCard();
 				return new CardMoveEvent(boardEvent.EventDateTime, fromLane, toLane, card);
 			}
 			catch (ItemNotFoundException ex)
@@ -476,10 +456,14 @@ namespace LeanKit.API.Client.Library
 			}
 		}
 
-		private CardAddEvent CreatCardAddEvent(BoardHistoryEvent boardEvent, IEnumerable<Lane> affectedLanes)
+		private CardAddEvent CreateCardAddEvent(BoardHistoryEvent boardEvent, IEnumerable<Lane> affectedLanes)
 		{
 			try
 			{
+				// Is the card being created on a taskboard?
+				if (!_board.AllLanes().ContainsLane(boardEvent.ToLaneId) && !_includeTaskboards)
+					return null;
+
 				var lanes = affectedLanes as IList<Lane> ?? affectedLanes.ToList();
 				var addedCard = lanes.ContainsCard(boardEvent.CardId)
 					? lanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId)
@@ -495,7 +479,7 @@ namespace LeanKit.API.Client.Library
 			}
 		}
 
-		private CardUpdateEvent CreatCardUpdateEvent(BoardHistoryEvent boardEvent, IEnumerable<Lane> affectedLanes)
+		private CardUpdateEvent CreateCardUpdateEvent(BoardHistoryEvent boardEvent, IEnumerable<Lane> affectedLanes)
 		{
 			try
 			{
@@ -544,6 +528,13 @@ namespace LeanKit.API.Client.Library
 				_boardLock.ExitReadLock();
 			}
 
+			// try getting card directly from the api
+			if (card == null)
+			{
+				var c = _api.GetCard(_boardId, cardId);
+				card = (c != null) ? c.ToCard() : null;
+			}
+
 			//try to find in archive, suppose it is not loaded
 			if (card == null)
 			{
@@ -554,7 +545,6 @@ namespace LeanKit.API.Client.Library
 				//Also, could be possible that the card is part of the cards older than 90 days
 				//In that case we my need to do a search too.
 			}
-
 
 			if (card == null) throw new ItemNotFoundException();
 
@@ -777,17 +767,17 @@ namespace LeanKit.API.Client.Library
 
 		public void AddTask(Card task, long cardId, string wipOverrideReason)
 		{
-			var results = string.IsNullOrEmpty(wipOverrideReason)
-				? _api.AddTask(_boardId, cardId, task)
-				: _api.AddTask(_boardId, cardId, task, wipOverrideReason);
+			//var results = string.IsNullOrEmpty(wipOverrideReason)
+			//	? _api.AddTask(_boardId, cardId, task)
+			//	: _api.AddTask(_boardId, cardId, task, wipOverrideReason);
 
-			_boardLock.EnterWriteLock();
-			try {
-				//TODO:  Figure out what to do for taskboards
-				//ApplyBoardChanges(results.BoardVersion, new[] {results.Lane});
-			} finally {
-				_boardLock.ExitWriteLock();
-			}			
+			//_boardLock.EnterWriteLock();
+			//try {
+			//	//TODO:  Figure out what to do for taskboards
+			//	//ApplyBoardChanges(results.BoardVersion, new[] {results.Lane});
+			//} finally {
+			//	_boardLock.ExitWriteLock();
+			//}			
 		}
 
 		public void UpdateTask(Card task, long cardId)
@@ -797,9 +787,9 @@ namespace LeanKit.API.Client.Library
 
 		public void UpdateTask(Card task, long cardId, string wipOverrideReason)
 		{
-			var results = string.IsNullOrEmpty(wipOverrideReason)
-				? _api.UpdateTask(_boardId, cardId, task)
-				: _api.UpdateTask(_boardId, cardId, task, wipOverrideReason);
+			//var results = string.IsNullOrEmpty(wipOverrideReason)
+			//	? _api.UpdateTask(_boardId, cardId, task)
+			//	: _api.UpdateTask(_boardId, cardId, task, wipOverrideReason);
 
 			//TODO: Figure out how to handle taskboards
 			//            CardView cardView = results.CardDTO;
@@ -819,7 +809,7 @@ namespace LeanKit.API.Client.Library
 
 		public void DeleteTask(long taskId, long cardId)
 		{
-			var results = _api.DeleteTask(_boardId, cardId, taskId);
+			// var results = _api.DeleteTask(_boardId, cardId, taskId);
 			//TODO: Figure out how to handle taskboards
 		}
 
@@ -830,7 +820,7 @@ namespace LeanKit.API.Client.Library
 
 		public void MoveTask(long taskId, long cardId, long toLaneId, int position, string wipOverrideReason)
 		{
-			var results = _api.MoveTask(_boardId, cardId, taskId, toLaneId, position, wipOverrideReason);
+			// var results = _api.MoveTask(_boardId, cardId, taskId, toLaneId, position, wipOverrideReason);
 			//TODO: Figure out how to handle taskboards
 		}
 
@@ -904,17 +894,17 @@ namespace LeanKit.API.Client.Library
 
 		[Obsolete("Use AddTask instead")]
 		public void AddTaskboardCard(Card card, long taskboardId, string wipOverrideReason) {
-			var results = string.IsNullOrEmpty(wipOverrideReason)
-				? _api.AddTaskboardCard(_boardId, taskboardId, card)
-				: _api.AddTaskboardCard(_boardId, taskboardId, card, wipOverrideReason);
+			//var results = string.IsNullOrEmpty(wipOverrideReason)
+			//	? _api.AddTaskboardCard(_boardId, taskboardId, card)
+			//	: _api.AddTaskboardCard(_boardId, taskboardId, card, wipOverrideReason);
 
-			_boardLock.EnterWriteLock();
-			try {
-				//TODO:  Figure out what to do for taskboards
-				//ApplyBoardChanges(results.BoardVersion, new[] {results.Lane});
-			} finally {
-				_boardLock.ExitWriteLock();
-			}
+			//_boardLock.EnterWriteLock();
+			//try {
+			//	//TODO:  Figure out what to do for taskboards
+			//	//ApplyBoardChanges(results.BoardVersion, new[] {results.Lane});
+			//} finally {
+			//	_boardLock.ExitWriteLock();
+			//}
 		}
 
 		[Obsolete("Use UpdateTask instead")]
@@ -924,9 +914,9 @@ namespace LeanKit.API.Client.Library
 
 		[Obsolete("Use UpdateTask instead")]
 		public void UpdateTaskboardCard(Card card, long taskboardId, string wipOverrideReason) {
-			var results = string.IsNullOrEmpty(wipOverrideReason)
-				? _api.UpdateTaskboardCard(_boardId, taskboardId, card)
-				: _api.UpdateTaskboardCard(_boardId, taskboardId, card, wipOverrideReason);
+			//var results = string.IsNullOrEmpty(wipOverrideReason)
+			//	? _api.UpdateTaskboardCard(_boardId, taskboardId, card)
+			//	: _api.UpdateTaskboardCard(_boardId, taskboardId, card, wipOverrideReason);
 			//TODO: Figure out how to handle taskboards
 			//            CardView cardView = results.CardDTO;
 			//            Lane lane = _board.GetLaneById(cardView.LaneId);
