@@ -405,9 +405,13 @@ namespace LeanKit.API.Client.Library
 
 		private CardDeletedEvent CreateCardDeletedEvent(BoardHistoryEvent boardEvent)
 		{
-			// Temporarily removed. Breaks every time.
-			// Get the effected lanes from the original board
-			var card = _board.AllLanes().FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
+			// Is the card being deleted from a taskboard?
+			if (!_includeTaskboards && !_board.AllLanes().ContainsLane(boardEvent.ToLaneId))
+				return null;
+
+			var card = (_board.AllLanes().ContainsLane(boardEvent.ToLaneId))
+				? _board.AllLanes().FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId)
+				: GetCard(boardEvent.CardId);
 
 			return new CardDeletedEvent(boardEvent.EventDateTime, card);
 		}
