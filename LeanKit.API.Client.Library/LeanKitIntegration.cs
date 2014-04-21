@@ -161,8 +161,8 @@ namespace LeanKit.API.Client.Library
 										if (movedCardEvent != null) boardChangedEventArgs.MovedCards.Add(movedCardEvent);
 										break;
 									case EventType.CardFieldsChanged:
-										boardChangedEventArgs.UpdatedCards.Add(CreateCardUpdateEvent(boardEvent, 
-											checkResults.AffectedLanes));
+                                        var changedFieldsEvent = CreateCardUpdateEvent(boardEvent, checkResults.AffectedLanes);
+                                        if (changedFieldsEvent != null) boardChangedEventArgs.UpdatedCards.Add(changedFieldsEvent);
 										break;
 									case EventType.CardDeleted:
 										boardChangedEventArgs.DeletedCards.Add(CreateCardDeletedEvent(boardEvent));
@@ -194,7 +194,8 @@ namespace LeanKit.API.Client.Library
 										boardChangedEventArgs.UserWipOverrides.Add(CreateUserWipOverrideEvent(boardEvent));
 										break;
 									case EventType.AttachmentChange:
-										boardChangedEventArgs.AttachmentChangedEvents.Add(CreateAttachmentEvent(boardEvent));
+                                        var attachmentEvent = CreateAttachmentEvent(boardEvent);
+                                        if (attachmentEvent != null) boardChangedEventArgs.AttachmentChangedEvents.Add(attachmentEvent);
 										break;
 
 									case EventType.CardMoveToBoard:
@@ -388,6 +389,10 @@ namespace LeanKit.API.Client.Library
 
 		private AttachmentChangedEvent CreateAttachmentEvent(BoardHistoryEvent boardEvent)
 		{
+            // Is the card on a taskboard?
+            if (!_board.AllLanes().ContainsLane(boardEvent.ToLaneId) && !_includeTaskboards)
+                return null;
+
 			var card = _board.Lanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
 			return new AttachmentChangedEvent(boardEvent.EventDateTime, card, boardEvent.FileName, boardEvent.CommentText,
 				boardEvent.IsFileBeingDeleted);
@@ -487,6 +492,10 @@ namespace LeanKit.API.Client.Library
 		{
 			try
 			{
+                // Is the card being updated on a taskboard?
+                if (!_board.AllLanes().ContainsLane(boardEvent.ToLaneId) && !_includeTaskboards)
+                    return null;
+
 				var originalCard = _board.GetCardById(boardEvent.CardId);
 				var updatedCard =
 					affectedLanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
