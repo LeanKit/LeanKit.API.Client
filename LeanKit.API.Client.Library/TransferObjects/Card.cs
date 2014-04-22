@@ -143,4 +143,13 @@ namespace LeanKit.API.Client.Library.TransferObjects
 	{
 		public virtual long BoardVersion { get; set; }
 	}
+
+    public class CardDelegationResult
+    {
+        public virtual long ParentBoardId { get; set; }
+        public virtual long DelegationCardId { get; set; }
+        public virtual long DestinationLaneId { get; set; }
+        public virtual string DestinationLaneName { get; set; }
+    }
+
 }

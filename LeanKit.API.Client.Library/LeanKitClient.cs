@@ -254,7 +254,13 @@ namespace LeanKit.API.Client.Library
 			return _restCommandProcessor.Post<CardsDeleteResult>(_accountAuth, resource, cardIds);
 		}
 
-		public BoardUpdates CheckForUpdates(long boardId, int version)
+        public CardDelegationResult DelegateCard(long cardId, long delegationBoardId)
+        {
+            var resource = "Kanban/API/Card/Delegate/" + cardId + "/" + delegationBoardId;
+            return _restCommandProcessor.Post<CardDelegationResult>(_accountAuth, resource);
+        }
+        
+        public BoardUpdates CheckForUpdates(long boardId, int version)
 		{
 			var resource = "/Kanban/Api/Board/" + boardId + "/BoardVersion/" + version + "/CheckForUpdates";
 			return _restCommandProcessor.Get<BoardUpdates>(_accountAuth, resource);
