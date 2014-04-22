@@ -257,7 +257,7 @@ namespace LeanKit.API.Client.Library
         public CardDelegationResult DelegateCard(long cardId, long delegationBoardId)
         {
             var resource = "Kanban/API/Card/Delegate/" + cardId + "/" + delegationBoardId;
-            return _restCommandProcessor.Get<CardDelegationResult>(_accountAuth, resource);
+            return _restCommandProcessor.Post<CardDelegationResult>(_accountAuth, resource);
         }
         
         public BoardUpdates CheckForUpdates(long boardId, int version)
