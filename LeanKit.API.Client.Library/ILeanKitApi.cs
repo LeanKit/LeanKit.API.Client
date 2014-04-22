@@ -37,7 +37,8 @@ namespace LeanKit.API.Client.Library
 		CardsUpdateResult UpdateCards(long boardId, IEnumerable<Card> updatedCards);
 		long DeleteCard(long boardId, long cardId);
 		CardsDeleteResult DeleteCards(long boardId, IEnumerable<long> cardIds);
-		BoardUpdates CheckForUpdates(long boardId, int version);
+        CardDelegationResult DelegateCard(long cardId, long delegationBoardId);
+        BoardUpdates CheckForUpdates(long boardId, int version);
 		IEnumerable<Comment> GetComments(long boardId, long cardId);
 		int PostComment(long boardId, long cardId, Comment comment);
 		int PostCommentByExternalId(long boardId, string externalId, Comment comment);
