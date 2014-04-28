@@ -316,6 +316,10 @@ namespace LeanKit.API.Client.Library
 		private CardUserAssignmentEvent CreateCardUserAssignmentEvent(BoardHistoryEvent boardEvent,
 			IEnumerable<Lane> affectedLanes)
 		{
+            // Is the card on a taskboard?
+            if (!_includeTaskboards && !_board.AllLanes().ContainsLane(boardEvent.ToLaneId))
+                return null;
+
 			try
 			{
 				var card = affectedLanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
@@ -334,6 +338,10 @@ namespace LeanKit.API.Client.Library
 		private CardUserUnAssignmentEvent CreateCardUserUnAssignmentEvent(BoardHistoryEvent boardEvent,
 			IEnumerable<Lane> affectedLanes)
 		{
+            // Is the card on a taskboard?
+            if (!_includeTaskboards && !_board.AllLanes().ContainsLane(boardEvent.ToLaneId))
+                return null;
+
 			try
 			{
 				var card = affectedLanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
@@ -497,6 +505,10 @@ namespace LeanKit.API.Client.Library
                     return null;
 
 				var originalCard = _board.GetCardById(boardEvent.CardId);
+
+                if (originalCard == null)
+                    return null;
+
 				var updatedCard =
 					affectedLanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
 				return new CardUpdateEvent(boardEvent.EventDateTime, originalCard, updatedCard);
