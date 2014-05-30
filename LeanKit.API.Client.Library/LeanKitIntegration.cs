@@ -326,12 +326,24 @@ namespace LeanKit.API.Client.Library
 				var assignedUser = _board.BoardUsers.FindUser(boardEvent.AssignedUserId);
 				return new CardUserAssignmentEvent(boardEvent.EventDateTime, card, assignedUser);
 			}
-			catch (ItemNotFoundException ex)
+			catch (ItemNotFoundException)
 			{
-				throw new ItemNotFoundException(
-					string.Format(
-						"Unable to create Card User Assignment Event for board [{0}], lane [{1}], card [{2}], and user [{3}]. User count: {4}. {5}",
-						_boardId, boardEvent.ToLaneId, boardEvent.CardId, boardEvent.AssignedUserId, _board.BoardUsers.Count(), ex.Message));
+				// Might be a recently added user, try refreshing board
+				InitBoard();
+
+				try
+				{
+					var card = affectedLanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
+					var assignedUser = _board.BoardUsers.FindUser(boardEvent.AssignedUserId);
+					return new CardUserAssignmentEvent(boardEvent.EventDateTime, card, assignedUser);
+				}
+				catch (ItemNotFoundException ex)
+				{
+					throw new ItemNotFoundException(
+						string.Format(
+							"Unable to create Card User Assignment Event for board [{0}], lane [{1}], card [{2}], and user [{3}]. User count: {4}. {5}",
+							_boardId, boardEvent.ToLaneId, boardEvent.CardId, boardEvent.AssignedUserId, _board.BoardUsers.Count(), ex.Message));
+				}
 			}
 		}
 
@@ -349,12 +361,25 @@ namespace LeanKit.API.Client.Library
 
 				return new CardUserUnAssignmentEvent(boardEvent.EventDateTime, card, unAssignedUser);
 			}
-			catch (ItemNotFoundException ex)
+			catch (ItemNotFoundException)
 			{
-				throw new ItemNotFoundException(
-					string.Format(
-						"Unable to create Card User Unassignment Event for board [{0}], lane [{1}], card [{2}], and user [{3}]. User count: {4}. {5}",
-						_boardId, boardEvent.ToLaneId, boardEvent.CardId, boardEvent.AssignedUserId, _board.BoardUsers.Count(), ex.Message));
+				// Might be a recently added user, try refreshing board
+				InitBoard();
+
+				try
+				{
+					var card = affectedLanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
+					var unAssignedUser = _board.BoardUsers.FindUser(boardEvent.AssignedUserId);
+
+					return new CardUserUnAssignmentEvent(boardEvent.EventDateTime, card, unAssignedUser);
+				}
+				catch (ItemNotFoundException ex)
+				{
+					throw new ItemNotFoundException(
+						string.Format(
+							"Unable to create Card User Unassignment Event for board [{0}], lane [{1}], card [{2}], and user [{3}]. User count: {4}. {5}",
+							_boardId, boardEvent.ToLaneId, boardEvent.CardId, boardEvent.AssignedUserId, _board.BoardUsers.Count(), ex.Message));
+				}
 			}
 		}
 
@@ -384,14 +409,25 @@ namespace LeanKit.API.Client.Library
 		{
 			try
 			{
-				User affectedUser = _board.BoardUsers.FindUser(boardEvent.WipOverrideUser);
+				var affectedUser = _board.BoardUsers.FindUser(boardEvent.WipOverrideUser);
 				return new UserWipOverrideEvent(boardEvent.EventDateTime, boardEvent.WipOverrideComment, affectedUser);
 			}
 			catch (ItemNotFoundException)
 			{
-				throw new ItemNotFoundException(
-					string.Format("Unable to create User Wip Override Event for board [{0}] and user [{1}]", _boardId,
-						boardEvent.WipOverrideUser));
+				// Might be a recently added user, try refreshing board
+				InitBoard();
+
+				try
+				{
+					var affectedUser = _board.BoardUsers.FindUser(boardEvent.WipOverrideUser);
+					return new UserWipOverrideEvent(boardEvent.EventDateTime, boardEvent.WipOverrideComment, affectedUser);
+				}
+				catch (ItemNotFoundException)
+				{
+					throw new ItemNotFoundException(
+						string.Format("Unable to create User Wip Override Event for board [{0}] and user [{1}]", _boardId,
+							boardEvent.WipOverrideUser));
+				}
 			}
 		}
 
