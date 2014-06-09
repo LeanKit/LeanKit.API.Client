@@ -161,8 +161,8 @@ namespace LeanKit.API.Client.Library
 										if (movedCardEvent != null) boardChangedEventArgs.MovedCards.Add(movedCardEvent);
 										break;
 									case EventType.CardFieldsChanged:
-                                        var changedFieldsEvent = CreateCardUpdateEvent(boardEvent, checkResults.AffectedLanes);
-                                        if (changedFieldsEvent != null) boardChangedEventArgs.UpdatedCards.Add(changedFieldsEvent);
+										var changedFieldsEvent = CreateCardUpdateEvent(boardEvent, checkResults.AffectedLanes);
+										if (changedFieldsEvent != null) boardChangedEventArgs.UpdatedCards.Add(changedFieldsEvent);
 										break;
 									case EventType.CardDeleted:
 										boardChangedEventArgs.DeletedCards.Add(CreateCardDeletedEvent(boardEvent));
@@ -194,8 +194,8 @@ namespace LeanKit.API.Client.Library
 										boardChangedEventArgs.UserWipOverrides.Add(CreateUserWipOverrideEvent(boardEvent));
 										break;
 									case EventType.AttachmentChange:
-                                        var attachmentEvent = CreateAttachmentEvent(boardEvent);
-                                        if (attachmentEvent != null) boardChangedEventArgs.AttachmentChangedEvents.Add(attachmentEvent);
+										var attachmentEvent = CreateAttachmentEvent(boardEvent);
+										if (attachmentEvent != null) boardChangedEventArgs.AttachmentChangedEvents.Add(attachmentEvent);
 										break;
 
 									case EventType.CardMoveToBoard:
@@ -316,9 +316,9 @@ namespace LeanKit.API.Client.Library
 		private CardUserAssignmentEvent CreateCardUserAssignmentEvent(BoardHistoryEvent boardEvent,
 			IEnumerable<Lane> affectedLanes)
 		{
-            // Is the card on a taskboard?
-            if (!_includeTaskboards && !_board.AllLanes().ContainsLane(boardEvent.ToLaneId))
-                return null;
+			// Is the card on a taskboard?
+			if (!_includeTaskboards && !_board.AllLanes().ContainsLane(boardEvent.ToLaneId))
+				return null;
 
 			try
 			{
@@ -338,9 +338,9 @@ namespace LeanKit.API.Client.Library
 		private CardUserUnAssignmentEvent CreateCardUserUnAssignmentEvent(BoardHistoryEvent boardEvent,
 			IEnumerable<Lane> affectedLanes)
 		{
-            // Is the card on a taskboard?
-            if (!_includeTaskboards && !_board.AllLanes().ContainsLane(boardEvent.ToLaneId))
-                return null;
+			// Is the card on a taskboard?
+			if (!_includeTaskboards && !_board.AllLanes().ContainsLane(boardEvent.ToLaneId))
+				return null;
 
 			try
 			{
@@ -397,9 +397,9 @@ namespace LeanKit.API.Client.Library
 
 		private AttachmentChangedEvent CreateAttachmentEvent(BoardHistoryEvent boardEvent)
 		{
-            // Is the card on a taskboard?
-            if (!_board.AllLanes().ContainsLane(boardEvent.ToLaneId) && !_includeTaskboards)
-                return null;
+			// Is the card on a taskboard?
+			if (!_board.AllLanes().ContainsLane(boardEvent.ToLaneId) && !_includeTaskboards)
+				return null;
 
 			var card = _board.AllLanes().FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
 			return new AttachmentChangedEvent(boardEvent.EventDateTime, card, boardEvent.FileName, boardEvent.CommentText,
@@ -500,14 +500,14 @@ namespace LeanKit.API.Client.Library
 		{
 			try
 			{
-                // Is the card being updated on a taskboard?
-                if (!_board.AllLanes().ContainsLane(boardEvent.ToLaneId) && !_includeTaskboards)
-                    return null;
+				// Is the card being updated on a taskboard?
+				if (!_board.AllLanes().ContainsLane(boardEvent.ToLaneId) && !_includeTaskboards)
+					return null;
 
 				var originalCard = _board.GetCardById(boardEvent.CardId);
 
-                if (originalCard == null)
-                    return null;
+				if (originalCard == null)
+					return null;
 
 				var updatedCard =
 					affectedLanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
