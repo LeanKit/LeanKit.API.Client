@@ -437,7 +437,7 @@ namespace LeanKit.API.Client.Library
             if (!_board.AllLanes().ContainsLane(boardEvent.ToLaneId) && !_includeTaskboards)
                 return null;
 
-			var card = _board.Lanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
+			var card = _board.AllLanes().FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
 			return new AttachmentChangedEvent(boardEvent.EventDateTime, card, boardEvent.FileName, boardEvent.CommentText,
 				boardEvent.IsFileBeingDeleted);
 		}
