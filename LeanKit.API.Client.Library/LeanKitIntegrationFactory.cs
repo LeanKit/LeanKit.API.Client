@@ -42,5 +42,13 @@ namespace LeanKit.API.Client.Library
 		{
 			return new LeanKitIntegration(boardId, apiClient);
 		}
+
+		public ILeanKitIntegration Create(long boardId, LeanKitAccountAuth accountAuth, IntegrationSettings settings)
+		{
+			var clientFactory = new LeanKitClientFactory();
+			var apiClient = clientFactory.Create(accountAuth);
+			return new LeanKitIntegration(boardId, apiClient, settings);
+		}
+
 	}
 }

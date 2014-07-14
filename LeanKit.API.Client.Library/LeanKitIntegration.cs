@@ -34,12 +34,17 @@ namespace LeanKit.API.Client.Library
 
 		private readonly ReaderWriterLockSlim _boardLock = new ReaderWriterLockSlim();
 
-		private readonly IntegrationSettings _integrationSettings = new IntegrationSettings();
+		private readonly IntegrationSettings _integrationSettings;
 		private Board _board;
 		private bool _includeTaskboards;
 
-		public LeanKitIntegration(long boardId, ILeanKitApi apiClient)
+		public LeanKitIntegration(long boardId, ILeanKitApi apiClient) : this(boardId, apiClient, new IntegrationSettings())
 		{
+		}
+
+		public LeanKitIntegration(long boardId, ILeanKitApi apiClient, IntegrationSettings settings)
+		{
+			_integrationSettings = settings;
 			_boardId = boardId;
 			_api = apiClient;
 			ShouldContinue = true;
@@ -115,19 +120,30 @@ namespace LeanKit.API.Client.Library
 
 		private CheckForUpdatesLoopResult SetupCheckForUpdatesLoop()
 		{
-			do
+			const int pulse = 1000;
+			var pollingInterval = (long) _integrationSettings.CheckForUpdatesIntervalSeconds*1000;
+			
+			var stopWatch = new System.Diagnostics.Stopwatch();
+			stopWatch.Start();
+
+			while (ShouldContinue)
 			{
-				//Sleep the thread until its time to do work
-				Thread.Sleep(_integrationSettings.CheckForUpdatesIntervalSeconds*1000);
+				if (!stopWatch.IsRunning) stopWatch.Restart();
+			
+				Thread.Sleep(pulse);
+				
+				if (stopWatch.ElapsedMilliseconds < pollingInterval) continue;
 
 				try
 				{
+					stopWatch.Stop();
+
 					//Now do the work
-					var checkResults = _api.CheckForUpdates(_board.Id, (int) _board.Version);
+					var checkResults = _api.CheckForUpdates(_board.Id, (int)_board.Version);
 
 					if (checkResults == null) continue;
 
-					OnBoardStatusChecked(new BoardStatusCheckedEventArgs {HasChanges = checkResults.HasUpdates});
+					OnBoardStatusChecked(new BoardStatusCheckedEventArgs { HasChanges = checkResults.HasUpdates });
 
 					if (!checkResults.HasUpdates) continue;
 
@@ -177,17 +193,17 @@ namespace LeanKit.API.Client.Library
 										break;
 									case EventType.UserAssignment:
 										if (boardEvent.IsUnassigning)
-											boardChangedEventArgs.UnAssignedUsers.Add(CreateCardUserUnAssignmentEvent(boardEvent, 
+											boardChangedEventArgs.UnAssignedUsers.Add(CreateCardUserUnAssignmentEvent(boardEvent,
 												checkResults.AffectedLanes));
 										else
-											boardChangedEventArgs.AssignedUsers.Add(CreateCardUserAssignmentEvent(boardEvent, 
+											boardChangedEventArgs.AssignedUsers.Add(CreateCardUserAssignmentEvent(boardEvent,
 												checkResults.AffectedLanes));
 										break;
 									case EventType.CommentPost:
 										boardChangedEventArgs.PostedComments.Add(CreateCommentPostedEvent(boardEvent));
 										break;
 									case EventType.WipOverride:
-										boardChangedEventArgs.WipOverrides.Add(CreateWipOverrideEvent(boardEvent, 
+										boardChangedEventArgs.WipOverrides.Add(CreateWipOverrideEvent(boardEvent,
 											checkResults.AffectedLanes));
 										break;
 									case EventType.UserWipOverride:
@@ -252,7 +268,7 @@ namespace LeanKit.API.Client.Library
 							else
 							{
 								_board = checkResults.NewPayload;
-								OnBoardRefresh(new BoardInfoRefreshedEventArgs {FromBoardChange = true});
+								OnBoardRefresh(new BoardInfoRefreshedEventArgs { FromBoardChange = true });
 							}
 						}
 						catch (Exception ex)
@@ -270,7 +286,7 @@ namespace LeanKit.API.Client.Library
 					}
 					catch (Exception ex)
 					{
-						OnClientError(new ClientErrorEventArgs {Exception = ex, Message = "Error processing board events."});
+						OnClientError(new ClientErrorEventArgs { Exception = ex, Message = "Error processing board events." });
 					}
 					finally
 					{
@@ -279,9 +295,12 @@ namespace LeanKit.API.Client.Library
 				}
 				catch (Exception ex)
 				{
-					OnClientError(new ClientErrorEventArgs {Exception = ex, Message = "Error checking for board events."});
+					OnClientError(new ClientErrorEventArgs { Exception = ex, Message = "Error checking for board events." });
 				}
-			} while (ShouldContinue);
+
+			}
+			stopWatch.Stop();
+
 			return CheckForUpdatesLoopResult.Exit;
 		}
 

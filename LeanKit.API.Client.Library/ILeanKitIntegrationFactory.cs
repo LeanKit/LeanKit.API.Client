@@ -21,5 +21,7 @@ namespace LeanKit.API.Client.Library
 		/// <param name="accountAuth">The account authentication information used to connect to the LeanKit API.</param>
 		/// <returns>The <see cref="ILeanKitIntegration" /> used to monitor and modify the specified board. </returns>
 		ILeanKitIntegration Create(long boardId, LeanKitAccountAuth accountAuth);
+		ILeanKitIntegration Create(long boardId, LeanKitAccountAuth accountAuth, IntegrationSettings settings);
+
 	}
 }
