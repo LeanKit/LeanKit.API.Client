@@ -126,24 +126,27 @@ namespace LeanKit.API.Client.Library
 			var stopWatch = new System.Diagnostics.Stopwatch();
 			stopWatch.Start();
 
-			while (ShouldContinue)
+			do
 			{
 				if (!stopWatch.IsRunning) stopWatch.Restart();
-			
-				Thread.Sleep(pulse);
-				
-				if (stopWatch.ElapsedMilliseconds < pollingInterval) continue;
-
+				if (ShouldContinue)
+				{
+					while (stopWatch.ElapsedMilliseconds < pollingInterval)
+					{
+						if (!ShouldContinue) return CheckForUpdatesLoopResult.Exit;
+						Thread.Sleep(pulse);
+					}
+				}
 				try
 				{
 					stopWatch.Stop();
 
 					//Now do the work
-					var checkResults = _api.CheckForUpdates(_board.Id, (int)_board.Version);
+					var checkResults = _api.CheckForUpdates(_board.Id, (int) _board.Version);
 
 					if (checkResults == null) continue;
 
-					OnBoardStatusChecked(new BoardStatusCheckedEventArgs { HasChanges = checkResults.HasUpdates });
+					OnBoardStatusChecked(new BoardStatusCheckedEventArgs {HasChanges = checkResults.HasUpdates});
 
 					if (!checkResults.HasUpdates) continue;
 
@@ -268,7 +271,7 @@ namespace LeanKit.API.Client.Library
 							else
 							{
 								_board = checkResults.NewPayload;
-								OnBoardRefresh(new BoardInfoRefreshedEventArgs { FromBoardChange = true });
+								OnBoardRefresh(new BoardInfoRefreshedEventArgs {FromBoardChange = true});
 							}
 						}
 						catch (Exception ex)
@@ -286,7 +289,7 @@ namespace LeanKit.API.Client.Library
 					}
 					catch (Exception ex)
 					{
-						OnClientError(new ClientErrorEventArgs { Exception = ex, Message = "Error processing board events." });
+						OnClientError(new ClientErrorEventArgs {Exception = ex, Message = "Error processing board events."});
 					}
 					finally
 					{
@@ -295,10 +298,11 @@ namespace LeanKit.API.Client.Library
 				}
 				catch (Exception ex)
 				{
-					OnClientError(new ClientErrorEventArgs { Exception = ex, Message = "Error checking for board events." });
+					OnClientError(new ClientErrorEventArgs {Exception = ex, Message = "Error checking for board events."});
 				}
 
-			}
+			} while (ShouldContinue);
+
 			stopWatch.Stop();
 
 			return CheckForUpdatesLoopResult.Exit;

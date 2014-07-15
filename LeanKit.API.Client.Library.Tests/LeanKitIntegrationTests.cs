@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using LeanKit.API.Client.Library.Exceptions;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -353,13 +354,13 @@ namespace LeanKit.API.Client.Library.Tests
 			{
 				Assert.NotNull(eventArgs);
 				Assert.AreEqual(1, eventArgs.BlockedCards.Count);
+				var affectedBoard = _integration.GetBoard();
+				Assert.NotNull(affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 1));
+				Assert.IsTrue(affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 1).IsBlocked);
+				Assert.IsNotNullOrEmpty(affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 1).BlockReason);
 			});
 			_integration.StartWatching();
-
-			var affectedBoard = _integration.GetBoard();
-			Assert.NotNull(affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 1));
-			Assert.IsTrue(affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 1).IsBlocked);
-			Assert.IsNotNullOrEmpty(affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 1).BlockReason);
+//			Thread.Sleep(1500);
 		}
 
 		[Test]
@@ -487,10 +488,10 @@ namespace LeanKit.API.Client.Library.Tests
 				Assert.NotNull(eventArgs);
 				Assert.AreEqual(1, eventArgs.DeletedCards.Count);
 				Assert.AreEqual(0, eventArgs.MovedCards.Count);
+				var affectedBoard = _integration.GetBoard();
+				Assert.IsNull(affectedBoard.GetLaneById(1).Cards.FirstOrDefault(x => x.Id == 1));
 			});
 			_integration.StartWatching();
-			var affectedBoard = _integration.GetBoard();
-			Assert.IsNull(affectedBoard.GetLaneById(1).Cards.FirstOrDefault(x => x.Id == 1));
 		}
 
 		[Test]
@@ -574,10 +575,10 @@ namespace LeanKit.API.Client.Library.Tests
 				Assert.NotNull(eventArgs);
 				Assert.AreEqual(1, eventArgs.AddedCards.Count);
 				Assert.AreEqual(0, eventArgs.MovedCards.Count);
+				var affectedBoard = _integration.GetBoard();
+				Assert.NotNull(affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 4));
 			});
 			_integration.StartWatching();
-			var affectedBoard = _integration.GetBoard();
-			Assert.NotNull(affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 4));
 		}
 
 		[Test]
@@ -659,13 +660,14 @@ namespace LeanKit.API.Client.Library.Tests
 			{
 				Assert.NotNull(eventArgs);
 				Assert.AreEqual(1, eventArgs.AssignedUsers.Count);
+				
+				var affectedBoard = _integration.GetBoard();
+				Assert.NotNull(affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 1));
+				Assert.IsNotEmpty(affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 1).AssignedUsers);
+				Assert.IsNotNull(
+					affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 1).AssignedUsers.FirstOrDefault(x => x.AssignedUserId == 1));
 			});
 			_integration.StartWatching();
-			var affectedBoard = _integration.GetBoard();
-			Assert.NotNull(affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 1));
-			Assert.IsNotEmpty(affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 1).AssignedUsers);
-			Assert.IsNotNull(
-				affectedBoard.GetLaneById(1).Cards.First(x => x.Id == 1).AssignedUsers.FirstOrDefault(x => x.AssignedUserId == 1));
 		}
 
 		[Test]

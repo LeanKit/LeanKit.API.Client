@@ -71,7 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LeanKit.API.Client.Library\LeanKit.API.Client.Library.csproj">
-      <Project>{E1A6887D-DCEE-4B78-8187-4BBC1B370776}</Project>
+      <Project>{e1a6887d-dcee-4b78-8187-4bbc1b370776}</Project>
       <Name>LeanKit.API.Client.Library</Name>
     </ProjectReference>
   </ItemGroup>
