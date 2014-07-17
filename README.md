@@ -77,9 +77,9 @@ int PostComment(long boardId, long cardId, Comment comment);
 IEnumerable<CardEvent> GetCardHistory(long boardId, long cardId);
 IEnumerable<CardView> SearchCards(long boardId, SearchOptions options); 
 IEnumerable<Asset> GetAttachments(long boardId, long cardId);
+Asset GetAttachment(long boardId, long cardId, long attachmentId);
 long SaveAttachment(long boardId, long cardId, string fileName, string description, string mimeType, byte[] fileBytes);
 long DeleteAttachment(long boardId, long cardId, long attachmentId);
-Asset GetAttachment(long boardId, long cardId, long attachmentId);
 ```
 
 ### LeanKitIntegration Interface
