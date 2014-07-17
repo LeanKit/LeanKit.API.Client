@@ -48,6 +48,11 @@ namespace LeanKit.API.Client.Library
 		void MoveTask(long taskId, long cardId, long toLaneId, int position);
 		void MoveTask(long taskId, long cardId, long toLaneId, int position, string wipOverrideReason);
 
+		IEnumerable<Asset> GetAttachments(long cardId);
+		Asset GetAttachment(long cardId, long attachmentId);
+		void SaveAttachment(long cardId, string fileName, string description, string mimeType, byte[] fileBytes);
+		void DeleteAttachment(long cardId, long attachmentId);
+
 		#region obsolete
 
 		[Obsolete("Creating taskboards is no longer supported", true)]

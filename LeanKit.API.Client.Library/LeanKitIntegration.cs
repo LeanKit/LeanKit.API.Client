@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
 using LeanKit.API.Client.Library.Enumerations;
 using LeanKit.API.Client.Library.EventArguments;
@@ -870,6 +871,26 @@ namespace LeanKit.API.Client.Library
 		{
 			// var results = _api.MoveTask(_boardId, cardId, taskId, toLaneId, position, wipOverrideReason);
 			//TODO: Figure out how to handle taskboards
+		}
+
+		public IEnumerable<Asset> GetAttachments(long cardId)
+		{
+			return _api.GetAttachments(_boardId, cardId);
+		}
+
+		public Asset GetAttachment(long cardId, long attachmentId)
+		{
+			return _api.GetAttachment(_boardId, cardId, attachmentId);
+		}
+
+		public void SaveAttachment(long cardId, string fileName, string description, string mimeType, byte[] fileBytes)
+		{
+			_api.SaveAttachment(_boardId, cardId, fileName, description, mimeType, fileBytes);
+		}
+
+		public void DeleteAttachment(long cardId, long attachmentId)
+		{
+			_api.DeleteAttachment(_boardId, cardId, attachmentId);
 		}
 
 		#region obsolete

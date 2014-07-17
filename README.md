@@ -76,6 +76,10 @@ IEnumerable<Comment> GetComments(long boardId, long cardId);
 int PostComment(long boardId, long cardId, Comment comment);
 IEnumerable<CardEvent> GetCardHistory(long boardId, long cardId);
 IEnumerable<CardView> SearchCards(long boardId, SearchOptions options); 
+IEnumerable<Asset> GetAttachments(long boardId, long cardId);
+long SaveAttachment(long boardId, long cardId, string fileName, string description, string mimeType, byte[] fileBytes);
+long DeleteAttachment(long boardId, long cardId, long attachmentId);
+Asset GetAttachment(long boardId, long cardId, long attachmentId);
 ```
 
 ### LeanKitIntegration Interface
@@ -104,6 +108,11 @@ Board GetBoard();
 void MoveCard(long cardId, long toLaneId, int position, string wipOverrideReason);
 void MoveCard(long cardId, long toLaneId, int position);
 IEnumerable<CardView> SearchCards(SearchOptions options);
+IEnumerable<Asset> GetAttachments(long cardId);
+Asset GetAttachment(long cardId, long attachmentId);
+void SaveAttachment(long cardId, string fileName, string description, string mimeType, byte[] fileBytes);
+void DeleteAttachment(long cardId, long attachmentId);
+
 ```
 
 ### BoardChangedEventArgs Properties
@@ -135,7 +144,7 @@ Visit [support.leankit.com](http://support.leankit.com).
 
 ## Copyright
 
-Copyright &copy; 2013 LeanKit Inc.
+Copyright &copy; 2013-2014 LeanKit Inc.
 
 ## License
 
