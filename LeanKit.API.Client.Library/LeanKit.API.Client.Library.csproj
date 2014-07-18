@@ -36,13 +36,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\LeanKit.IntegrationService\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\LeanKit.IntegrationService\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -101,6 +99,7 @@
     <Compile Include="TransferObjects\ClassOfService.cs" />
     <Compile Include="TransferObjects\Comment.cs" />
     <Compile Include="TransferObjects\CreateTaskboardCommand.cs" />
+    <Compile Include="TransferObjects\PaginationResult.cs" />
     <Compile Include="TransferObjects\Taskboard.cs" />
     <Compile Include="TransferObjects\TaskboardCreateResult.cs" />
     <Compile Include="TransferObjects\HierarchicalLane.cs" />

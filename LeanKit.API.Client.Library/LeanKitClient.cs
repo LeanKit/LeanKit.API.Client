@@ -293,7 +293,7 @@ namespace LeanKit.API.Client.Library
 		public IEnumerable<CardView> SearchCards(long boardId, SearchOptions options)
 		{
 			var resource = "/Kanban/Api/Board/" + boardId + "/SearchCards";
-			return _restCommandProcessor.Get<List<CardView>>(_accountAuth, resource, options);
+			return _restCommandProcessor.Post<PaginationResult<CardView>>(_accountAuth, resource, options).Results;
 		}
 
 		public IEnumerable<CardList> ListNewCards(long boardId) 
