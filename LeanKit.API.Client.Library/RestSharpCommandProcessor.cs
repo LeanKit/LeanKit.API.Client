@@ -5,7 +5,9 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -14,8 +16,8 @@ using LeanKit.API.Client.Library.TransferObjects;
 using LeanKit.API.Client.Library.Validation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using RestSharp;
+using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 using UnauthorizedAccessException = LeanKit.API.Client.Library.Exceptions.UnauthorizedAccessException;
 
 namespace LeanKit.API.Client.Library
@@ -60,6 +62,91 @@ namespace LeanKit.API.Client.Library
 		{
 			return Process<T>(accountAuth,
 				new RestRequest(Method.POST) {Resource = resource, RequestFormat = DataFormat.Json});
+		}
+
+		public T PostFile<T>(LeanKitAccountAuth accountAuth, string resource, Dictionary<string, object> parameters, string fileName, string mimeType, byte[] fileBytes) where T : new()
+		{
+			var boundary = string.Format("----------{0:N}", Guid.NewGuid());
+			var contentType = "multipart/form-data; boundary=" + boundary;
+			var formBytes = GetMultipartFormData(parameters, boundary, fileName, mimeType, fileBytes);
+
+			var request = WebRequest.Create(accountAuth.GetAccountUrl() + resource) as HttpWebRequest;
+	
+			if (request == null) throw new Exception("Error posting file. Could not create HttpWebRequest");
+
+			request.Method = "POST";
+			request.ContentType = contentType;
+			request.ContentLength = formBytes.Length;
+			request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(accountAuth.Username + ":" + accountAuth.Password)));
+
+			using (var requestStream = request.GetRequestStream())
+			{
+				requestStream.Write(formBytes, 0, formBytes.Length);
+				requestStream.Close();
+			}
+
+			var response = request.GetResponse() as HttpWebResponse;
+			var responseStream = new StreamReader(response.GetResponseStream());
+			var result = responseStream.ReadToEnd();
+			response.Close();
+
+			//var task = PostFileAsync(accountAuth, resource, parameters, fileName, fileBytes);
+			//var result = task.Result;
+
+			if (string.IsNullOrEmpty(result)) return new T();
+			var asyncResponse = JsonConvert.DeserializeObject<AsyncResponse2>(result);
+			if (asyncResponse == null || asyncResponse.ReplyData == null || asyncResponse.ReplyData.Length == 0) return new T();
+
+			var rawJson = asyncResponse.ReplyData[0].ToString();
+
+			if (string.IsNullOrEmpty(rawJson)) return new T();
+
+			var authUserDateFormat = _settings.DateFormat;
+
+			var isoDateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = authUserDateFormat };
+
+			var retVal = JsonConvert.DeserializeObject<T>(rawJson, new JsonSerializerSettings
+			{
+				Error = HandleError,
+				Converters = { isoDateTimeConverter }
+			});
+			return retVal;
+		}
+		
+		private static byte[] GetMultipartFormData(Dictionary<string, object> parameters, string boundary, string fileName, string mimeType, byte[] fileBytes)
+		{
+			var encoding = Encoding.UTF8;
+			var stream = new MemoryStream();
+			var count = 0;
+			foreach (var p in parameters)
+			{
+				if (count > 0)
+					stream.Write(encoding.GetBytes("\r\n"), 0, encoding.GetByteCount("\r\n"));
+
+				var data = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"\r\n\r\n{2}", boundary, p.Key, p.Value);
+				stream.Write(encoding.GetBytes(data), 0, encoding.GetByteCount(data));
+
+				count++;
+			}
+
+			if (count > 0)
+				stream.Write(encoding.GetBytes("\r\n"), 0, encoding.GetByteCount("\r\n"));
+
+			if (string.IsNullOrEmpty(mimeType)) mimeType = "application/octet-stream";
+
+			var header = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n", boundary, fileName, mimeType);
+			stream.Write(encoding.GetBytes(header), 0, encoding.GetByteCount(header));
+			stream.Write(fileBytes, 0, fileBytes.Length);
+
+			var footer = string.Format("\r\n--{0}--\r\n", boundary);
+			stream.Write(encoding.GetBytes(footer), 0, encoding.GetByteCount(footer));
+
+			stream.Position = 0;
+			var formData = new byte[stream.Length];
+			stream.Read(formData, 0, formData.Length);
+			stream.Close();
+
+			return formData;
 		}
 
 		private T Process<T>(LeanKitAccountAuth accountAuth, IRestRequest request) where T : new()

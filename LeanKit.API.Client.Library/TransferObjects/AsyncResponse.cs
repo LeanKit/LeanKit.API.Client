@@ -12,4 +12,11 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		public string ReplyText { get; set; }
 		public string ReplyData { get; set; }
 	}
+
+	public class AsyncResponse2
+	{
+		public int ReplyCode { get; set; }
+		public string ReplyText { get; set; }
+		public object[] ReplyData { get; set; }
+	}
 }

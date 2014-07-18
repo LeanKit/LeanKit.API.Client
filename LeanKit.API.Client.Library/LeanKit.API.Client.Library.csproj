@@ -40,6 +40,13 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp">
+    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\LeanKit.IntegrationService\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -81,8 +88,9 @@
     <Compile Include="RestSharpCommandProcessor.cs" />
     <Compile Include="TransferObjects\Activity.cs" />
     <Compile Include="TransferObjects\Archive.cs" />
+    <Compile Include="TransferObjects\Asset.cs" />
     <Compile Include="TransferObjects\AssignedUserInfo.cs" />
-    <Compile Include="TransferObjects\AsynchResponse.cs" />
+    <Compile Include="TransferObjects\AsyncResponse.cs" />
     <Compile Include="TransferObjects\BlockedStatus.cs" />
     <Compile Include="TransferObjects\Board.cs" />
     <Compile Include="TransferObjects\BoardHistoryEvent.cs" />

@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using LeanKit.API.Client.Library.TransferObjects;
 
 namespace LeanKit.API.Client.Library
@@ -57,6 +58,10 @@ namespace LeanKit.API.Client.Library
 		long DeleteTask(long boardId, long cardId, long taskId);
 		CardMoveResult MoveTask(long boardId, long cardId, long taskId, long toLaneId, int position);
 		CardMoveResult MoveTask(long boardId, long cardId, long taskId, long toLaneId, int position, string wipOverrideReason);
+		long SaveAttachment(long boardId, long cardId, string fileName, string description, string mimeType, byte[] fileBytes);
+		long DeleteAttachment(long boardId, long cardId, long attachmentId);
+		Asset GetAttachment(long boardId, long cardId, long attachmentId);
+		IEnumerable<Asset> GetAttachments(long boardId, long cardId);
 
 		#region Obsolete
 	
