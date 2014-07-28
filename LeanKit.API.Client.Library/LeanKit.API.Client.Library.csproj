@@ -105,6 +105,8 @@
     <Compile Include="TransferObjects\CardView.cs" />
     <Compile Include="TransferObjects\ClassOfService.cs" />
     <Compile Include="TransferObjects\Comment.cs" />
+    <Compile Include="TransferObjects\DrillThroughStatisticsCard.cs" />
+    <Compile Include="TransferObjects\DrillThroughStatistics.cs" />
     <Compile Include="TransferObjects\CreateTaskboardCommand.cs" />
     <Compile Include="TransferObjects\PaginationResult.cs" />
     <Compile Include="TransferObjects\Taskboard.cs" />

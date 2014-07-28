@@ -38,6 +38,7 @@ namespace LeanKit.API.Client.Library
 		void MoveCard(long cardId, long toLaneId, int position, string wipOverrideReason);
 		void MoveCard(long cardId, long toLaneId, int position);
 		IEnumerable<CardView> SearchCards(SearchOptions options);
+		DrillThroughStatistics GetDrillThroughStatistics(long cardId, long boardId);
 
 		Taskboard GetTaskboard(long cardId);
 		void AddTask(Card task, long cardId);

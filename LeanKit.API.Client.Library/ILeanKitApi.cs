@@ -48,6 +48,7 @@ namespace LeanKit.API.Client.Library
 		IEnumerable<CardList> ListNewCards(long boardId);
 		CardMoveBetweenBoardsResult MoveCardToAnotherBoard(long cardId, long destBoardId);
 		User GetCurrentUser(long boardId);
+		DrillThroughStatistics GetDrillThroughStatistics(long boardId, long cardId);
 
 		Taskboard GetTaskboardById(long boardId, long taskboardId);
 		Taskboard GetTaskboard(long boardId, long cardId);
@@ -58,6 +59,7 @@ namespace LeanKit.API.Client.Library
 		long DeleteTask(long boardId, long cardId, long taskId);
 		CardMoveResult MoveTask(long boardId, long cardId, long taskId, long toLaneId, int position);
 		CardMoveResult MoveTask(long boardId, long cardId, long taskId, long toLaneId, int position, string wipOverrideReason);
+
 		long SaveAttachment(long boardId, long cardId, string fileName, string description, string mimeType, byte[] fileBytes);
 		long DeleteAttachment(long boardId, long cardId, long attachmentId);
 		Asset GetAttachment(long boardId, long cardId, long attachmentId);

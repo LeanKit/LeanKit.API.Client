@@ -893,6 +893,11 @@ namespace LeanKit.API.Client.Library
 			_api.DeleteAttachment(_boardId, cardId, attachmentId);
 		}
 
+		public DrillThroughStatistics GetDrillThroughStatistics(long boardId, long cardId)
+		{
+			return _api.GetDrillThroughStatistics(boardId, cardId);
+		}
+
 		#region obsolete
 
 		[Obsolete("Creating taskboards is no longer supported", true)]

@@ -310,6 +310,12 @@ namespace LeanKit.API.Client.Library
 			return _restCommandProcessor.Post<CardMoveBetweenBoardsResult>(_accountAuth, resource);
 		}
 
+		public DrillThroughStatistics GetDrillThroughStatistics(long boardId, long cardId)
+		{
+			var resource = string.Format("/Kanban/Api/Card/{0}/GetDrillThroughStatistics/{1}", boardId, cardId);
+			return _restCommandProcessor.Get<DrillThroughStatistics>(_accountAuth, resource);
+		}
+
 		#endregion
 
 		#region Taskboard methods
