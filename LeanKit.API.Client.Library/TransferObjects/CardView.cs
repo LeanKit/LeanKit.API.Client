@@ -54,6 +54,11 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		public virtual string DateArchived { get; set; }
 		public virtual string LastComment { get; set; }
 		public virtual int CommentsCount { get; set; }
+		public string LastAttachment { get; set; }
+		public int AttachmentsCount { get; set; }
+
+		public virtual long? DrillThroughBoardId { get; set; }
+		public virtual bool HasDrillThroughBoard { get { return DrillThroughBoardId.HasValue; } }
 
 		public List<Comment> Comments { get; set; }
 		public List<CardEvent> HistoryEvents { get; set; }
