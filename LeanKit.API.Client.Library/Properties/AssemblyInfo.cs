@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("LeanKit.API.Client.Library")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("LeanKit API client wrapper for .NET")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("LeanKit Inc.")]
 [assembly: AssemblyProduct("LeanKit.API.Client.Library")]

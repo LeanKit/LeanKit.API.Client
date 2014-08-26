@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>LeanKit.API.Client</id>
+    <version>1.0.1</version>
+    <authors>LeanKit</authors>
+    <owners>LeanKit</owners>
+    <licenseUrl>https://raw.githubusercontent.com/LeanKit/LeanKit.API.Client/master/License.txt</licenseUrl>
+    <projectUrl>https://github.com/LeanKit/LeanKit.API.Client</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/LeanKit/LeanKit.API.Client/master/leankit-64x64.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>LeanKit API Client wrapper for .NET</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2014 LeanKit</copyright>
+    <tags></tags>
+    <dependencies>
+	  <dependency id="Newtonsoft.Json" version="6.0.3" />
+	  <dependency id="RestSharp" version="104.4.0" />
+    </dependencies>
+  </metadata>
+</package>

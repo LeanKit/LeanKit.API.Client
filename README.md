@@ -4,6 +4,16 @@ The **LeanKit.API.Client.Library** namespace provides a wrapper library designed
 
 This library exposes two primary ways to interact with LeanKit. These are the LeanKitClient and LeanKitIntegration classes. Both of these are explained below.
 
+## Installing with NuGet
+
+NuGet is a Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects that use the .NET Framework. To learn more about NuGet, read the [documentation](http://docs.nuget.org).
+
+To install the [LeanKit API Client](https://www.nuget.org/packages/LeanKit.API.Client) using NuGet, search for "LeanKit" in the Visual Studio NuGet Package Manager, or install directly using the Package Manager Console:
+
+```
+PM> Install-Package LeanKit.API.Client
+```
+
 ## LeanKitClient
 
 This class exposes methods that interact directly with LeanKit API. This class exposes the same methods exposed through the REST API, but hides the complexity of working with HTTP and JSON. This class allows you to send commands and queries to LeanKit using strongly-typed native objects. This class should be used if you are building a simple, stateless integration where you are not interested in interacting with a LeanKit Board over a period of time. This class should also be used if you cannot support a long-running service or process.  
@@ -22,7 +32,7 @@ var api = new LeanKitClientFactory().Create(leanKitAuth);
 
 ## LeanKitIntegration
 
-This class is designed to be used in stateful implementations. This class monitors the changes to a Board, and raises events whenever a board is changed. This library helps reduce the complexity of polling for changes. In addition, this class exposes the same command and query methods that are available in the LeanKitClient class. Leveraging its stateful nature, many of these queries and commands can be optimized, and provide more powerful validation. 
+This class is designed to be used in stateful implementations. This class monitors the changes to a Board, and raises events whenever a board is changed. This library helps reduce the complexity of polling for changes. In addition, this class exposes the same command and query methods that are available in the LeanKitClient class. Leveraging its stateful nature, many of these queries and commands can be optimized, and provide more powerful validation.
 
 This class is designed to retrieve and hold a reference to the board, and therefore should not be instantiated numerous times. Each instance will be associated to a single LeanKit Board. You will need to create an instance for each Board you wish to interact with.
 
@@ -39,7 +49,7 @@ var leanKitAuth = new LeanKitAccountAuth
 // Use the board ID (number) of the board you wish to monitor
 // This ID can be found in the URL when you visit your LeanKit board
 // https://accountname.leankit.com/Boards/View/101
-var boardId = 101; 
+var boardId = 101;
 
 var integration = new LeanKitIntegrationFactory().Create(boardId, leanKitAuth);
 integration.BoardChanged += integration_BoardChanged;
@@ -75,7 +85,7 @@ BoardUpdates CheckForUpdates(long boardId, int version);
 IEnumerable<Comment> GetComments(long boardId, long cardId);
 int PostComment(long boardId, long cardId, Comment comment);
 IEnumerable<CardEvent> GetCardHistory(long boardId, long cardId);
-IEnumerable<CardView> SearchCards(long boardId, SearchOptions options); 
+IEnumerable<CardView> SearchCards(long boardId, SearchOptions options);
 IEnumerable<Asset> GetAttachments(long boardId, long cardId);
 Asset GetAttachment(long boardId, long cardId, long attachmentId);
 long SaveAttachment(long boardId, long cardId, string fileName, string description, string mimeType, byte[] fileBytes);
