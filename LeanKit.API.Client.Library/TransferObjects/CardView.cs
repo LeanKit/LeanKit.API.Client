@@ -54,9 +54,12 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		public virtual string DateArchived { get; set; }
 		public virtual string LastComment { get; set; }
 		public virtual int CommentsCount { get; set; }
-
+		
 		public List<Comment> Comments { get; set; }
 		public List<CardEvent> HistoryEvents { get; set; }
+
+		public int? ParentCardId { get; set; }
+		public int? ParentBoardId { get; set; }
 
 		public Card ToCard()
 		{
@@ -88,6 +91,9 @@ namespace LeanKit.API.Client.Library.TransferObjects
 			card.LastActivity = LastActivity;
 			card.LastComment = LastComment;
 			card.DateArchived = DateArchived;
+			card.ParentCardId = ParentCardId;
+			card.ParentBoardId = ParentBoardId;
+
 			return card;
 		}
 	}
