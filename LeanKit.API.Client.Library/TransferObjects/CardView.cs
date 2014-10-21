@@ -59,9 +59,12 @@ namespace LeanKit.API.Client.Library.TransferObjects
 
 		public virtual long? DrillThroughBoardId { get; set; }
 		public virtual bool HasDrillThroughBoard { get { return DrillThroughBoardId.HasValue; } }
-
+		
 		public List<Comment> Comments { get; set; }
 		public List<CardEvent> HistoryEvents { get; set; }
+
+		public int? ParentCardId { get; set; }
+		public int? ParentBoardId { get; set; }
 
 		public Card ToCard()
 		{
@@ -93,6 +96,9 @@ namespace LeanKit.API.Client.Library.TransferObjects
 			card.LastActivity = LastActivity;
 			card.LastComment = LastComment;
 			card.DateArchived = DateArchived;
+			card.ParentCardId = ParentCardId;
+			card.ParentBoardId = ParentBoardId;
+
 			return card;
 		}
 	}

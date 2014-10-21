@@ -74,6 +74,9 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		public List<CardEvent> HistoryEvents { get; set; }
 		public List<CardContextView> CardContexts { get; set; }
 
+		public virtual int? ParentCardId { get; set; }
+		public virtual int? ParentBoardId { get; set; }
+
 		public CardView ToCardView()
 		{
 			var cardView = new CardView();
@@ -102,6 +105,8 @@ namespace LeanKit.API.Client.Library.TransferObjects
 			cardView.LastActivity = LastActivity;
 			cardView.LastComment = LastComment;
 			cardView.DateArchived = DateArchived;
+			cardView.ParentBoardId = ParentBoardId;
+			cardView.ParentCardId = ParentCardId;
 
 			return cardView;
 		}
