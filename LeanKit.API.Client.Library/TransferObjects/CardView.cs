@@ -34,7 +34,6 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		public virtual bool Active { get; set; }
 		public virtual string Color { get; set; }
 		public virtual long Version { get; set; }
-		public virtual List<AssignedUserInfo> AssignedUsers { get; set; }
 		public virtual bool IsBlocked { get; set; }
 		public virtual string BlockReason { get; set; }
 		public virtual int Index { get; set; }
@@ -56,6 +55,10 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		public virtual int CommentsCount { get; set; }
 		public string LastAttachment { get; set; }
 		public int AttachmentsCount { get; set; }
+
+		public virtual long? AssignedUserId { get; set; }
+		public long[] AssignedUserIds { get; set; }
+		public virtual List<AssignedUserInfo> AssignedUsers { get; set; }
 
 		public virtual long? DrillThroughBoardId { get; set; }
 		public virtual bool HasDrillThroughBoard { get { return DrillThroughBoardId.HasValue; } }
@@ -88,9 +91,8 @@ namespace LeanKit.API.Client.Library.TransferObjects
 			card.Title = Title;
 			card.TypeId = TypeId;
 			card.Version = Version;
-			card.AssignedUserIds = (AssignedUsers != null) ? AssignedUsers.Select(x => x.AssignedUserId).ToArray() : null;
+			card.AssignedUserIds = (AssignedUsers != null) ? (AssignedUserIds != null) ? AssignedUserIds : AssignedUsers.Select(x => x.Id.Value).ToArray() : null;
 			card.Comments = Comments;
-			card.HistoryEvents = HistoryEvents;
 			card.HistoryEvents = HistoryEvents;
 			card.LastMove = LastMove;
 			card.LastActivity = LastActivity;
