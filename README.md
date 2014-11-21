@@ -21,7 +21,7 @@ This class exposes methods that interact directly with LeanKit API. This class e
 ### Connecting using LeanKitClient
 
 ```
-var leanKitAuth = new LeanKitAccountAuth
+var leanKitAuth = new LeanKitBasicAuth
 	{
 		Hostname = "your-leankit-account-name", // e.g. https://accountname.leankit.com
 		Username = "your-account-email-address",
@@ -39,7 +39,7 @@ This class is designed to retrieve and hold a reference to the board, and theref
 ### Connecting using LeanKitIntegration
 
 ```
-var leanKitAuth = new LeanKitAccountAuth
+var leanKitAuth = new LeanKitBasicAuth
 	{
 		Hostname = "your-leankit-account-name", // e.g. https://accountname.leankit.com
 		Username = "your-account-email-address",
