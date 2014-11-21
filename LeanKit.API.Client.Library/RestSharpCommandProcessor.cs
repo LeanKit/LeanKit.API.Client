@@ -113,35 +113,6 @@ namespace LeanKit.API.Client.Library
 			return retVal;
 		}
 
-		[Obsolete("This is deprecated. Please use ILeanKitAccountAuth instead.")]
-		public T Get<T>(LeanKitAccountAuth accountAuth, string resource) where T : new()
-		{
-			return Get<T>(accountAuth.ToBasicAuth(), resource);
-		}
-
-		[Obsolete("This is deprecated. Please use ILeanKitAccountAuth instead.")]
-		public T Get<T>(LeanKitAccountAuth accountAuth, string resource, object body) where T : new()
-		{
-			return Get<T>(accountAuth.ToBasicAuth(), resource, body);
-		}
-
-		[Obsolete("This is deprecated. Please use ILeanKitAccountAuth instead.")]
-		public T Post<T>(LeanKitAccountAuth accountAuth, string resource, object body) where T : new()
-		{
-			return Post<T>(accountAuth.ToBasicAuth(), resource, body);
-		}
-
-		[Obsolete("This is deprecated. Please use ILeanKitAccountAuth instead.")]
-		public T Post<T>(LeanKitAccountAuth accountAuth, string resource) where T : new()
-		{
-			return Post<T>(accountAuth.ToBasicAuth(), resource);
-		}
-
-		[Obsolete("This is deprecated. Please use ILeanKitAccountAuth instead.")]
-		public T PostFile<T>(LeanKitAccountAuth accountAuth, string resource, Dictionary<string, object> parameters, string fileName, string mimeType, byte[] fileBytes) where T : new()
-		{
-			return PostFile<T>(accountAuth.ToBasicAuth(), resource, parameters, fileName, mimeType, fileBytes);
-		}
 		
 		private static byte[] GetMultipartFormData(Dictionary<string, object> parameters, string boundary, string fileName, string mimeType, byte[] fileBytes)
 		{
