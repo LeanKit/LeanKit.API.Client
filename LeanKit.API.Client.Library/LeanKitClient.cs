@@ -83,7 +83,7 @@ namespace LeanKit.API.Client.Library
 	{
 		private const string DefaultOverrideReason = "WIP Override performed by external system";
 		private readonly IRestCommandProcessor _restCommandProcessor;
-		private LeanKitAccountAuth _accountAuth;
+		private ILeanKitAccountAuth _accountAuth;
 
 		public LeanKitClient(IRestCommandProcessor restCommandProcessor)
 		{
@@ -524,7 +524,14 @@ namespace LeanKit.API.Client.Library
 
 		#region ILeanKitClient Members
 
+		[Obsolete("This is deprecated. Please use ILeanKitAccountAuth instead.")]
 		public ILeanKitApi Initialize(LeanKitAccountAuth accountAuth)
+		{
+			_accountAuth = accountAuth.ToBasicAuth();
+			return this;
+		}
+
+		public ILeanKitApi Initialize(ILeanKitAccountAuth accountAuth)
 		{
 			_accountAuth = accountAuth;
 			return this;

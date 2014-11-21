@@ -28,4 +28,19 @@ namespace LeanKit.API.Client.Library.TransferObjects
 			return string.Format(UrlTemplateOverride, Hostname);
 		}
 	}
+
+	public static class LeanKitAccountAuthExtension
+	{
+		public static LeanKitBasicAuth ToBasicAuth(this LeanKitAccountAuth accountAuth)
+		{
+			var auth = new LeanKitBasicAuth
+			{
+				Username = accountAuth.Username,
+				Password = accountAuth.Password,
+				Hostname = accountAuth.Hostname,
+				UrlTemplateOverride = accountAuth.UrlTemplateOverride
+			};
+			return auth;
+		}
+	}
 }

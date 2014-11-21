@@ -37,16 +37,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="RestSharp, Version=105.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\LeanKit.IntegrationService\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
+      <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -71,6 +67,7 @@
     <Compile Include="Exceptions\NoDataException.cs" />
     <Compile Include="Exceptions\UnauthorizedAccessException.cs" />
     <Compile Include="IInitializable.cs" />
+    <Compile Include="ILeanKitAccountAuth.cs" />
     <Compile Include="ILeanKitApi.cs" />
     <Compile Include="ILeanKitClientFactory.cs" />
     <Compile Include="ILeanKitIntegration.cs" />
@@ -78,6 +75,9 @@
     <Compile Include="IRestCommandProcessor.cs" />
     <Compile Include="JsonSerializer.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="LeanKitAccountAuthBase.cs" />
+    <Compile Include="LeanKitBasicAuth.cs" />
+    <Compile Include="LeanKitTokenAuth.cs" />
     <Compile Include="LeanKitClient.cs" />
     <Compile Include="LeanKitClientFactory.cs" />
     <Compile Include="LeanKitIntegration.cs" />
@@ -85,6 +85,7 @@
     <Compile Include="LeanKitIntegrationFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestSharpCommandProcessor.cs" />
+    <Compile Include="TokenAuthenticator.cs" />
     <Compile Include="TransferObjects\Activity.cs" />
     <Compile Include="TransferObjects\Archive.cs" />
     <Compile Include="TransferObjects\Asset.cs" />

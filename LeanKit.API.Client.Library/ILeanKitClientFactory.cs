@@ -4,6 +4,7 @@
 // </copyright> 
 //------------------------------------------------------------------------------
 
+using System;
 using LeanKit.API.Client.Library.TransferObjects;
 
 namespace LeanKit.API.Client.Library
@@ -15,6 +16,9 @@ namespace LeanKit.API.Client.Library
 	/// </summary>
 	public interface ILeanKitClientFactory
 	{
+		ILeanKitApi Create(ILeanKitAccountAuth accountAuth);
+
+		[Obsolete("This is deprecated. Please use ILeanKitAccountAuth instead.")]
 		ILeanKitApi Create(LeanKitAccountAuth accountAuth);
 	}
 }

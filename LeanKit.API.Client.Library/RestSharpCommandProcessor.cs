@@ -33,20 +33,20 @@ namespace LeanKit.API.Client.Library
 			_settings = settings;
 		}
 
-		public T Get<T>(LeanKitAccountAuth accountAuth, string resource) where T : new()
+		public T Get<T>(ILeanKitAccountAuth accountAuth, string resource) where T : new()
 		{
 			return Process<T>(accountAuth,
-				new RestRequest(Method.GET) {Resource = resource, RequestFormat = DataFormat.Json});
+				new RestRequest(Method.GET) { Resource = resource, RequestFormat = DataFormat.Json });
 		}
 
-		public T Get<T>(LeanKitAccountAuth accountAuth, string resource, object body) where T : new()
+		public T Get<T>(ILeanKitAccountAuth accountAuth, string resource, object body) where T : new()
 		{
-			var restRequest = new RestRequest(Method.GET) {Resource = resource, RequestFormat = DataFormat.Json};
+			var restRequest = new RestRequest(Method.GET) { Resource = resource, RequestFormat = DataFormat.Json };
 			restRequest.AddBody(body);
 			return Process<T>(accountAuth, restRequest);
 		}
 
-		public T Post<T>(LeanKitAccountAuth accountAuth, string resource, object body) where T : new()
+		public T Post<T>(ILeanKitAccountAuth accountAuth, string resource, object body) where T : new()
 		{
 			var restRequest = new RestRequest(Method.POST)
 			{
@@ -58,26 +58,26 @@ namespace LeanKit.API.Client.Library
 			return Process<T>(accountAuth, restRequest);
 		}
 
-		public T Post<T>(LeanKitAccountAuth accountAuth, string resource) where T : new()
+		public T Post<T>(ILeanKitAccountAuth accountAuth, string resource) where T : new()
 		{
 			return Process<T>(accountAuth,
-				new RestRequest(Method.POST) {Resource = resource, RequestFormat = DataFormat.Json});
+				new RestRequest(Method.POST) { Resource = resource, RequestFormat = DataFormat.Json });
 		}
 
-		public T PostFile<T>(LeanKitAccountAuth accountAuth, string resource, Dictionary<string, object> parameters, string fileName, string mimeType, byte[] fileBytes) where T : new()
+		public T PostFile<T>(ILeanKitAccountAuth accountAuth, string resource, Dictionary<string, object> parameters, string fileName, string mimeType, byte[] fileBytes) where T : new()
 		{
 			var boundary = string.Format("----------{0:N}", Guid.NewGuid());
 			var contentType = "multipart/form-data; boundary=" + boundary;
 			var formBytes = GetMultipartFormData(parameters, boundary, fileName, mimeType, fileBytes);
 
 			var request = WebRequest.Create(accountAuth.GetAccountUrl() + resource) as HttpWebRequest;
-	
+
 			if (request == null) throw new Exception("Error posting file. Could not create HttpWebRequest");
 
 			request.Method = "POST";
 			request.ContentType = contentType;
 			request.ContentLength = formBytes.Length;
-			request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(accountAuth.Username + ":" + accountAuth.Password)));
+			AddAuth(request, accountAuth);
 
 			using (var requestStream = request.GetRequestStream())
 			{
@@ -112,6 +112,7 @@ namespace LeanKit.API.Client.Library
 			});
 			return retVal;
 		}
+
 		
 		private static byte[] GetMultipartFormData(Dictionary<string, object> parameters, string boundary, string fileName, string mimeType, byte[] fileBytes)
 		{
@@ -149,7 +150,7 @@ namespace LeanKit.API.Client.Library
 			return formData;
 		}
 
-		private T Process<T>(LeanKitAccountAuth accountAuth, IRestRequest request) where T : new()
+		private T Process<T>(ILeanKitAccountAuth accountAuth, IRestRequest request) where T : new()
 		{
 			var errorMessages = _validationService.ValidateRequest((RestRequest) request);
 			if (errorMessages.Count > 0)
@@ -160,8 +161,8 @@ namespace LeanKit.API.Client.Library
 			}
 			var client = new RestClient
 			{
-				BaseUrl = accountAuth.GetAccountUrl(),
-				Authenticator = new HttpBasicAuthenticator(accountAuth.Username, accountAuth.Password)
+				BaseUrl = new Uri(accountAuth.GetAccountUrl()),
+				Authenticator = GetAuthenticator(accountAuth)
 			};
 
 			var response = RetryRequest(request, accountAuth, client);
@@ -187,7 +188,7 @@ namespace LeanKit.API.Client.Library
 			return retVal;
 		}
 
-		private static IRestResponse<AsyncResponse> RetryRequest(IRestRequest request, LeanKitAccountAuth accountAuth,
+		private static IRestResponse<AsyncResponse> RetryRequest(IRestRequest request, ILeanKitAccountAuth accountAuth,
 			RestClient client)
 		{
 			IRestResponse<AsyncResponse> response = new RestResponse<AsyncResponse>();
@@ -223,7 +224,7 @@ namespace LeanKit.API.Client.Library
 		}
 
 		private static void ValidateResponse(IRestResponse<AsyncResponse> response,
-			LeanKitAccountAuth leanKitAccountAuth,
+			ILeanKitAccountAuth leanKitAccountAuth,
 			IRestRequest request)
 		{
 			var requestedResource = GetRequestUri(leanKitAccountAuth.GetAccountUrl());
@@ -276,7 +277,7 @@ namespace LeanKit.API.Client.Library
 			}
 		}
 
-		private static string FormatApiRequestInfo(LeanKitAccountAuth leanKitAccountAuth, IRestRequest request, bool hidePassword = false)
+		private static string FormatApiRequestInfo(ILeanKitAccountAuth leanKitAccountAuth, IRestRequest request, bool hidePassword = false)
 		{
 			var accountAuthStringStringBuilder = new StringBuilder();
 
@@ -285,22 +286,64 @@ namespace LeanKit.API.Client.Library
 			accountAuthStringStringBuilder.Append(leanKitAccountAuth.Hostname != null
 				? leanKitAccountAuth.Hostname + ", "
 				: "Unknown, ");
-			accountAuthStringStringBuilder.Append("Username: ");
-			accountAuthStringStringBuilder.Append(leanKitAccountAuth.Username != null
-				? leanKitAccountAuth.Username + ", "
-				: "Unknown, ");
+			
+			var basicAuth = leanKitAccountAuth as LeanKitBasicAuth;
+            if (basicAuth != null)
+            {
+                accountAuthStringStringBuilder.Append("Username: ");
+                accountAuthStringStringBuilder.Append(basicAuth.Username != null
+                    ? basicAuth.Username + ", "
+                    : "Unknown, ");
 
-			if (!hidePassword)
-			{
-				accountAuthStringStringBuilder.Append("Password: ");
-				accountAuthStringStringBuilder.Append(leanKitAccountAuth.Password != null
-					? leanKitAccountAuth.Password + ", "
-					: "Unknown, ");
-			}
+                if (!hidePassword)
+                {
+                    accountAuthStringStringBuilder.Append("Password: ");
+                    accountAuthStringStringBuilder.Append(basicAuth.Password != null
+                        ? basicAuth.Password + ", "
+                        : "Unknown, ");
+                }
+            }
+
+            var tokenAuth = leanKitAccountAuth as LeanKitTokenAuth;
+            if (tokenAuth != null && !hidePassword)
+            {
+
+                accountAuthStringStringBuilder.Append("Token: ");
+                accountAuthStringStringBuilder.Append(tokenAuth.Token != null
+                    ? tokenAuth.Token + ", "
+                    : "Unknown, ");
+            }
 			accountAuthStringStringBuilder.Append("Resource: ");
 			accountAuthStringStringBuilder.Append(request.Resource != null ? request.Resource + ", " : "Unknown, ");
 
 			return accountAuthStringStringBuilder.ToString();
+		}
+
+		private static void AddAuth(WebRequest request, ILeanKitAccountAuth auth)
+		{
+			if (auth is LeanKitBasicAuth)
+			{
+				var basicAuth = auth as LeanKitBasicAuth;
+				request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(basicAuth.Username + ":" + basicAuth.Password)));
+			}
+			else if (auth is LeanKitTokenAuth)
+			{
+				request.Headers.Add("Authorization", "Token " + (auth as LeanKitTokenAuth).Token);
+			}
+		}
+
+		private static IAuthenticator GetAuthenticator(ILeanKitAccountAuth auth)
+		{
+			if (auth is LeanKitBasicAuth)
+			{
+				var basicAuth = auth as LeanKitBasicAuth;
+				return new HttpBasicAuthenticator(basicAuth.Username, basicAuth.Password);
+			}
+			if (auth is LeanKitTokenAuth)
+			{
+				return new TokenAuthenticator((auth as LeanKitTokenAuth).Token);
+			}
+			throw new ArgumentException("Unknown ILeanKitAccountAuth type");
 		}
 	}
 }
