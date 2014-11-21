@@ -76,8 +76,8 @@
     <Compile Include="JsonSerializer.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="LeanKitAccountAuthBase.cs" />
-    <Compile Include="LeanKitBasicAuth - Copy.cs" />
     <Compile Include="LeanKitBasicAuth.cs" />
+    <Compile Include="LeanKitTokenAuth.cs" />
     <Compile Include="LeanKitClient.cs" />
     <Compile Include="LeanKitClientFactory.cs" />
     <Compile Include="LeanKitIntegration.cs" />

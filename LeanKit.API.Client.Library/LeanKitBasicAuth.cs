@@ -1,7 +1,9 @@
 ﻿namespace LeanKit.API.Client.Library
 {
-	public class LeanKitTokenAuth : LeanKitAccountAuthBase
+	public class LeanKitBasicAuth : LeanKitAccountAuthBase
 	{ 
- 		public string Token { get; set; }
- 	}
+ 		public string Username { get; set; }
+ 
+ 		public string Password { get; set; }
+	}
 }

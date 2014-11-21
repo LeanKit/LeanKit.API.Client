@@ -36,9 +36,7 @@ namespace LeanKit.API.Client.Library
 		/// <param name="boardId">The Identity of the Board that will be watched and modified.</param>
 		/// <param name="accountAuth">The account authentication information used to connect to the LeanKit API.</param>
 		/// <returns>The <see cref="ILeanKitIntegration" /> used to monitor and modify the specified board. </returns>
-		[Obsolete("This is deprecated. Please use ILeanKitAccountAuth instead.")]
 		ILeanKitIntegration Create(long boardId, ILeanKitAccountAuth accountAuth);
-		[Obsolete("This is deprecated. Please use ILeanKitAccountAuth instead.")]
 		ILeanKitIntegration Create(long boardId, ILeanKitAccountAuth accountAuth, IntegrationSettings settings);
 	}
 }
