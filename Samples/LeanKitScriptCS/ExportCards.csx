@@ -17,7 +17,7 @@ var userName = "user@email.com";   // Change to your account email address
 var password = "p@ssword";         // Change to your account password
 var boardId = 101;                 // Change to your board ID, e.g. https://accountname.leankit.com/Boards/View/101
 
-var leanKitAuth = new LeanKitAccountAuth {
+var leanKitAuth = new LeanKitBasicAuth {
 		Hostname = host,
 		Username = userName,
 		Password = password

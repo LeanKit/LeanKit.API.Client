@@ -9,7 +9,6 @@ using System.Text;
 using System.Windows.Forms;
 using LeanKit.API.Client.Library;
 using LeanKit.API.Client.Library.EventArguments;
-using LeanKit.API.Client.Library.TransferObjects;
 
 namespace LeanKitNotifier
 {
@@ -54,7 +53,7 @@ namespace LeanKitNotifier
 				var password = ConfigurationManager.AppSettings["LeanKit-Password"];
 				var boardIds = ConfigurationManager.AppSettings["LeanKit-BoardId"];
 
-				var leanKitAuth = new LeanKitAccountAuth
+				var leanKitAuth = new LeanKitBasicAuth
 				{
 					Hostname = host,
 					Username = email,

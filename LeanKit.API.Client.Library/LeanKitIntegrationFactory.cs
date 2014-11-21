@@ -4,6 +4,7 @@
 // </copyright> 
 //------------------------------------------------------------------------------
 
+using System;
 using LeanKit.API.Client.Library.TransferObjects;
 
 namespace LeanKit.API.Client.Library
@@ -20,11 +21,18 @@ namespace LeanKit.API.Client.Library
 		/// <param name="boardId">The Identity of the Board that will be watched and modified.</param>
 		/// <param name="accountAuth">The account authentication information used to connect to the LeanKit API.</param>
 		/// <returns>The <see cref="ILeanKitIntegration" /> used to monitor and modify the specified board. </returns>
-		public ILeanKitIntegration Create(long boardId, LeanKitAccountAuth accountAuth)
+		public ILeanKitIntegration Create(long boardId, ILeanKitAccountAuth accountAuth)
 		{
 			var clientFactory = new LeanKitClientFactory();
 			var apiClient = clientFactory.Create(accountAuth);
 			return new LeanKitIntegration(boardId, apiClient);
+		}
+
+		public ILeanKitIntegration Create(long boardId, ILeanKitAccountAuth accountAuth, IntegrationSettings settings)
+		{
+			var clientFactory = new LeanKitClientFactory();
+			var apiClient = clientFactory.Create(accountAuth);
+			return new LeanKitIntegration(boardId, apiClient, settings);
 		}
 
 		/// <summary>
@@ -43,6 +51,25 @@ namespace LeanKit.API.Client.Library
 			return new LeanKitIntegration(boardId, apiClient);
 		}
 
+		/// <summary>
+		///     Factory method that creates and returns the <see cref="LeanKitIntegration" /> implementation using the
+		///     LeanKitClient created with the default <see cref="IRestCommandProcessor" />.
+		/// </summary>
+		/// <remarks>
+		///     The default implementation of the <see cref="IRestCommandProcessor" /> uses RestSharp.
+		/// </remarks>
+		/// <param name="boardId">The Identity of the Board that will be watched and modified.</param>
+		/// <param name="accountAuth">The account authentication information used to connect to the LeanKit API.</param>
+		/// <returns>The <see cref="ILeanKitIntegration" /> used to monitor and modify the specified board. </returns>
+		[Obsolete("This is deprecated. Please use ILeanKitAccountAuth instead.")]
+		public ILeanKitIntegration Create(long boardId, LeanKitAccountAuth accountAuth)
+		{
+			var clientFactory = new LeanKitClientFactory();
+			var apiClient = clientFactory.Create(accountAuth);
+			return new LeanKitIntegration(boardId, apiClient);
+		}
+
+		[Obsolete("This is deprecated. Please use ILeanKitAccountAuth instead.")]
 		public ILeanKitIntegration Create(long boardId, LeanKitAccountAuth accountAuth, IntegrationSettings settings)
 		{
 			var clientFactory = new LeanKitClientFactory();
