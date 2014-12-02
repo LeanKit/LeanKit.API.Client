@@ -25,7 +25,7 @@ var leanKitAuth = new LeanKitBasicAuth
 	{
 		Hostname = "MyAccount", 
 			   // Only the account name portion of the URL
-			   // e.g. https://ACCOUNTNAME.leankit.com
+			   // e.g. https://MyAccount.leankit.com
 		Username = "your-account-email-address",
 		Password = "your-account-password"
 	};
@@ -45,7 +45,7 @@ var leanKitAuth = new LeanKitBasicAuth
 	{
 		Hostname = "MyAccount", 
 			   // Only the account name portion of the URL
-			   // e.g. https://ACCOUNTNAME.leankit.com
+			   // e.g. https://MyAccount.leankit.com
 		Username = "your-account-email-address",
 		Password = "your-account-password"
 	};
