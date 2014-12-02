@@ -23,7 +23,7 @@ This class exposes methods that interact directly with LeanKit API. This class e
 ```
 var leanKitAuth = new LeanKitBasicAuth
 	{
-		Hostname = "your-leankit-account-name", // e.g. https://accountname.leankit.com
+		Hostname = "your-leankit-account-name", // Only the hostname part of the URL, e.g. https://ACCOUNTNAME.leankit.com
 		Username = "your-account-email-address",
 		Password = "your-account-password"
 	};
@@ -41,7 +41,7 @@ This class is designed to retrieve and hold a reference to the board, and theref
 ```
 var leanKitAuth = new LeanKitBasicAuth
 	{
-		Hostname = "your-leankit-account-name", // e.g. https://accountname.leankit.com
+		Hostname = "your-leankit-account-name", // Only the hostname part of the URL, e.g. https://ACCOUNTNAME.leankit.com
 		Username = "your-account-email-address",
 		Password = "your-account-password"
 	};
