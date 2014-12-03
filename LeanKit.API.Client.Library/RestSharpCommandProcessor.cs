@@ -113,7 +113,26 @@ namespace LeanKit.API.Client.Library
 			return retVal;
 		}
 
-		
+		public byte[] Download(ILeanKitAccountAuth accountAuth, string resource)
+		{
+			var request = new RestRequest(Method.GET) { Resource = resource, RequestFormat = DataFormat.Json };
+			var errorMessages = _validationService.ValidateRequest(request);
+			if (errorMessages.Count > 0)
+			{
+				var ex = new ValidationException("Provided request parameters are invalid.");
+				ex.Data["ErrorMessages"] = errorMessages;
+				throw ex;
+			}
+			var client = new RestClient
+			{
+				BaseUrl = new Uri(accountAuth.GetAccountUrl()),
+				Authenticator = GetAuthenticator(accountAuth)
+			};
+
+			return client.DownloadData(request);
+		}
+
+
 		private static byte[] GetMultipartFormData(Dictionary<string, object> parameters, string boundary, string fileName, string mimeType, byte[] fileBytes)
 		{
 			var encoding = Encoding.UTF8;

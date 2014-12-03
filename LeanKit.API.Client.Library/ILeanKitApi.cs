@@ -64,6 +64,7 @@ namespace LeanKit.API.Client.Library
 		long DeleteAttachment(long boardId, long cardId, long attachmentId);
 		Asset GetAttachment(long boardId, long cardId, long attachmentId);
 		IEnumerable<Asset> GetAttachments(long boardId, long cardId);
+		byte[] DownloadAttachment(long boardId, long attachmentId);
 
 		#region Obsolete
 	
