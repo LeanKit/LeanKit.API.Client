@@ -61,6 +61,7 @@ namespace LeanKit.API.Client.Library.TransferObjects
 
 		[StringLength(50, ErrorMessage = "Card ID may have 50 symbols only")]
 		public virtual string ExternalCardID { get; set; }
+		public virtual string ExternalCardIdPrefix { get; set; }
 
 		[DomainIdentityValidation]
 		public virtual long[] AssignedUserIds { get; set; }
@@ -89,6 +90,7 @@ namespace LeanKit.API.Client.Library.TransferObjects
 			cardView.DueDate = DueDate;
 			cardView.ExternalCardID = ExternalCardID;
 			cardView.ExternalSystemName = ExternalSystemName;
+			cardView.ExternalCardIdPrefix = ExternalCardIdPrefix;
 			cardView.Index = Index;
 			cardView.IsBlocked = IsBlocked;
 			cardView.LaneId = LaneId;

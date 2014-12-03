@@ -68,6 +68,7 @@ namespace LeanKit.API.Client.Library.TransferObjects
 
 		public int? ParentCardId { get; set; }
 		public int? ParentBoardId { get; set; }
+		public string ExternalCardIdPrefix { get; set; }
 
 		public Card ToCard()
 		{
@@ -81,6 +82,7 @@ namespace LeanKit.API.Client.Library.TransferObjects
 			card.ExternalCardID = ExternalCardID;
 			card.ExternalSystemName = ExternalSystemName;
 			card.ExternalSystemUrl = ExternalSystemUrl;
+			card.ExternalCardIdPrefix = ExternalCardIdPrefix;
 			card.Id = Id;
 			card.Index = Index;
 			card.IsBlocked = IsBlocked;
