@@ -4,10 +4,8 @@
 // </copyright> 
 //------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using LeanKit.API.Client.Library.TransferObjects;
-using RestSharp;
 
 namespace LeanKit.API.Client.Library
 {
@@ -22,6 +20,6 @@ namespace LeanKit.API.Client.Library
 		T Post<T>(ILeanKitAccountAuth accountAuth, string resource, object body) where T : new();
 		T Post<T>(ILeanKitAccountAuth accountAuth, string resource) where T : new();
 		T PostFile<T>(ILeanKitAccountAuth accountAuth, string resource, Dictionary<string, object> parameters, string fileName, string mimeType, byte[] fileBytes) where T : new();
-		byte[] Download(ILeanKitAccountAuth accountAuth, string resource);
+		AssetFile Download(ILeanKitAccountAuth accountAuth, string resource);
 	}
 }

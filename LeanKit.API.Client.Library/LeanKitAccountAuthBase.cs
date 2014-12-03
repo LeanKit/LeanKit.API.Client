@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//------------------------------------------------------------------------------
+// <copyright company="LeanKit Inc.">
+//     Copyright (c) LeanKit Inc.  All rights reserved.
+// </copyright> 
+//------------------------------------------------------------------------------
+
 using System.Configuration;
-using System.Linq;
-using System.Text;
 
 namespace LeanKit.API.Client.Library
 {

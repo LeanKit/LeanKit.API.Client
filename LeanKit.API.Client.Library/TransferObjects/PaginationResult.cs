@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿//------------------------------------------------------------------------------
+// <copyright company="LeanKit Inc.">
+//     Copyright (c) LeanKit Inc.  All rights reserved.
+// </copyright> 
+//------------------------------------------------------------------------------
+
+using System.Collections.Generic;
 
 namespace LeanKit.API.Client.Library.TransferObjects 
 {

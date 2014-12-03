@@ -508,7 +508,7 @@ namespace LeanKit.API.Client.Library
 			return _restCommandProcessor.Get<List<Asset>>(_accountAuth, resource);
 		}
 
-		public byte[] DownloadAttachment(long boardId, long attachmentId)
+		public AssetFile DownloadAttachment(long boardId, long attachmentId)
 		{
 			var resource = string.Format("/Kanban/Api/Card/DownloadAttachment/{0}/{1}", boardId, attachmentId);
 			return _restCommandProcessor.Download(_accountAuth, resource);

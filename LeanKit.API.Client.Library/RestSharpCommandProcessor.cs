@@ -24,6 +24,7 @@ namespace LeanKit.API.Client.Library
 {
 	public class RestSharpCommandProcessor : IRestCommandProcessor
 	{
+		private const string LeanKitUserAgent = "LeanKit.API.Client/1.0.8";
 		private readonly IntegrationSettings _settings;
 		private readonly IValidationService _validationService;
 
@@ -77,6 +78,7 @@ namespace LeanKit.API.Client.Library
 			request.Method = "POST";
 			request.ContentType = contentType;
 			request.ContentLength = formBytes.Length;
+			request.UserAgent = LeanKitUserAgent;
 			AddAuth(request, accountAuth);
 
 			using (var requestStream = request.GetRequestStream())
@@ -113,25 +115,36 @@ namespace LeanKit.API.Client.Library
 			return retVal;
 		}
 
-		public byte[] Download(ILeanKitAccountAuth accountAuth, string resource)
+		public AssetFile Download(ILeanKitAccountAuth accountAuth, string resource)
 		{
-			var request = new RestRequest(Method.GET) { Resource = resource, RequestFormat = DataFormat.Json };
-			var errorMessages = _validationService.ValidateRequest(request);
-			if (errorMessages.Count > 0)
+			var request = WebRequest.Create(accountAuth.GetAccountUrl() + resource) as HttpWebRequest;
+
+			if (request == null) throw new Exception("Error downloading file. Could not create HttpWebRequest");
+			request.UserAgent = LeanKitUserAgent;
+			AddAuth(request, accountAuth);
+
+			var response = request.GetResponse() as HttpWebResponse;
+			byte[] fileBytes;
+			using (var responseStream = response.GetResponseStream())
 			{
-				var ex = new ValidationException("Provided request parameters are invalid.");
-				ex.Data["ErrorMessages"] = errorMessages;
-				throw ex;
+				var buffer = new byte[4096];
+				using (var ms = new MemoryStream())
+				{
+					int read;
+					while ((read = responseStream.Read(buffer, 0, buffer.Length)) > 0)
+					{
+						ms.Write(buffer, 0, read);
+					}
+					fileBytes = ms.ToArray();
+				}
 			}
-			var client = new RestClient
+			return new AssetFile
 			{
-				BaseUrl = new Uri(accountAuth.GetAccountUrl()),
-				Authenticator = GetAuthenticator(accountAuth)
+				FileBytes = fileBytes,
+				ContentType = response.ContentType,
+				ContentLength = response.ContentLength
 			};
-
-			return client.DownloadData(request);
 		}
-
 
 		private static byte[] GetMultipartFormData(Dictionary<string, object> parameters, string boundary, string fileName, string mimeType, byte[] fileBytes)
 		{
@@ -181,7 +194,8 @@ namespace LeanKit.API.Client.Library
 			var client = new RestClient
 			{
 				BaseUrl = new Uri(accountAuth.GetAccountUrl()),
-				Authenticator = GetAuthenticator(accountAuth)
+				Authenticator = GetAuthenticator(accountAuth),
+				UserAgent = LeanKitUserAgent
 			};
 
 			var response = RetryRequest(request, accountAuth, client);

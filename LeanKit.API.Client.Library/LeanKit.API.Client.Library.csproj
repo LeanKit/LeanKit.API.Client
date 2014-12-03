@@ -89,6 +89,7 @@
     <Compile Include="TransferObjects\Activity.cs" />
     <Compile Include="TransferObjects\Archive.cs" />
     <Compile Include="TransferObjects\Asset.cs" />
+    <Compile Include="TransferObjects\AssetFile.cs" />
     <Compile Include="TransferObjects\AssignedUserInfo.cs" />
     <Compile Include="TransferObjects\AsyncResponse.cs" />
     <Compile Include="TransferObjects\BlockedStatus.cs" />
