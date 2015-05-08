@@ -20,63 +20,92 @@ namespace LeanKit.API.Client.Library.TransferObjects
 
 	public class Card
 	{
-		public virtual long Id { get; set; }
+		public long Id { get; set; }
 
 		[DomainIdentityValidation]
-		public virtual long LaneId { get; set; }
+		public long LaneId { get; set; }
 
 		[Required(ErrorMessage = "Title may not be empty")]
 		[StringLength(255, ErrorMessage = "Title may have 255 symbols only")]
-		public virtual string Title { get; set; }
+		public string Title { get; set; }
 
 		[StringLength(20000, ErrorMessage = "Description may not exceed 20000 characters")]
-		public virtual string Description { get; set; }
+		public string Description { get; set; }
 
-		public virtual string CreatedOn { get; set; }
-		public virtual string TypeName { get; set; }
+		public string CreatedOn { get; set; }
+		public string TypeName { get; set; }
 
 		[DomainIdentityValidation]
-		public virtual long TypeId { get; set; }
+		public long TypeId { get; set; }
 
-		public virtual int Priority { get; set; }
-		public virtual int Size { get; set; }
-		public virtual bool Active { get; set; }
-		public virtual string Color { get; set; }
-		public virtual long Version { get; set; }
-		public virtual bool IsBlocked { get; set; }
-		public virtual string BlockReason { get; set; }
-		public virtual int Index { get; set; }
-		public virtual string StartDate { get; set; }
-		public virtual string DueDate { get; set; }
-		public virtual string UserWipOverrideComment { get; set; }
-		public virtual string ExternalSystemName { get; set; }
+		public int Priority { get; set; }
+		public int Size { get; set; }
+		public bool Active { get; set; }
+		public string Color { get; set; }
+		public long Version { get; set; }
+		public bool IsBlocked { get; set; }
+		public string BlockReason { get; set; }
+		public int Index { get; set; }
+		public string StartDate { get; set; }
+		public string DueDate { get; set; }
+		public string UserWipOverrideComment { get; set; }
+		public string ExternalSystemName { get; set; }
 
 		[StringLength(2000, ErrorMessage = "External System Url may have 2000 symbols only")]
-		public virtual string ExternalSystemUrl { get; set; }
+		public string ExternalSystemUrl { get; set; }
 
-		public virtual string Tags { get; set; }
+		public string Tags { get; set; }
 
 		[DomainIdentityValidation]
-		public virtual long? ClassOfServiceId { get; set; }
+		public long? ClassOfServiceId { get; set; }
 
 		[StringLength(50, ErrorMessage = "Card ID may have 50 symbols only")]
-		public virtual string ExternalCardID { get; set; }
-		public virtual string ExternalCardIdPrefix { get; set; }
+		public string ExternalCardID { get; set; }
+		public string ExternalCardIdPrefix { get; set; }
 
 		[DomainIdentityValidation]
-		public virtual long[] AssignedUserIds { get; set; }
+		public long[] AssignedUserIds { get; set; }
 
-		public virtual string LastMove { get; set; }
-		public virtual string LastActivity { get; set; }
-		public virtual string DateArchived { get; set; }
-		public virtual string LastComment { get; set; }
-		public virtual int CommentsCount { get; set; }
+		public string LastMove { get; set; }
+		public string LastActivity { get; set; }
+		public string DateArchived { get; set; }
+		public string LastComment { get; set; }
+		public int CommentsCount { get; set; }
 		public List<Comment> Comments { get; set; }
 		public List<CardEvent> HistoryEvents { get; set; }
 		public List<CardContextView> CardContexts { get; set; }
 
-		public virtual int? ParentCardId { get; set; }
-		public virtual int? ParentBoardId { get; set; }
+		public int? ParentCardId { get; set; }
+		public int? ParentBoardId { get; set; }
+		public string ActualFinishDate { get; set; }
+		public string ActualStartDate { get; set; }
+		public string AssignedUserName { get; set; }
+		public string BlockStateChangeDate { get; set; }
+		public long BoardId { get; set; }
+		public string BoardTitle { get; set; }
+		public string CardTypeIconColor { get; set; }
+		public string CardTypeIconName { get; set; }
+		public string ClassOfServiceCustomIconColor { get; set; }
+		public string ClassOfServiceCustomIconName { get; set; }
+		public string CreateDate { get; set; }
+		public string CurrentContext { get; set; }
+		public long? CurrentTaskBoardId { get; set; }
+		public int? DrillThroughCompletionPercent { get; set; }
+		public int? DrillThroughProgressTotal { get; set; }
+		public int? DrillThroughProgressComplete { get; set; }
+		public int? DrillThroughProgressSizeComplete { get; set; }
+		public int? DrillThroughProgressSizeTotal { get; set; }
+		public string GravatarLink { get; set; }
+		public string Icon { get; set; }
+		public bool IsOlderThanXDays { get; set; }
+		public string LaneTitle { get; set; }
+		public long? ParentTaskboardId { get; set; }
+		public string SmallGravatarLink { get; set; }
+		public int? TaskBoardCompletionPercent { get; set; }
+		public int TaskBoardCompletedCardCount { get; set; }
+		public int TaskBoardCompletedCardSize { get; set; }
+		public int? TaskBoardTotalCards { get; set; }
+		public int? TaskBoardTotalSize { get; set; }
 
 		public CardView ToCardView()
 		{
@@ -109,6 +138,36 @@ namespace LeanKit.API.Client.Library.TransferObjects
 			cardView.DateArchived = DateArchived;
 			cardView.ParentBoardId = ParentBoardId;
 			cardView.ParentCardId = ParentCardId;
+			cardView.ActualFinishDate = ActualFinishDate;
+			cardView.ActualStartDate = ActualStartDate;
+			cardView.AssignedUserName = AssignedUserName;
+			cardView.BlockStateChangeDate = BlockStateChangeDate;
+			cardView.BoardId = BoardId;
+			cardView.BoardTitle = BoardTitle;
+			cardView.CardContexts = CardContexts;
+			cardView.CardTypeIconColor = CardTypeIconColor;
+			cardView.CardTypeIconName = CardTypeIconName;
+			cardView.ClassOfServiceCustomIconColor = ClassOfServiceCustomIconColor;
+			cardView.ClassOfServiceCustomIconName = ClassOfServiceCustomIconName;
+			cardView.CreateDate = CreateDate;
+			cardView.CurrentContext = CurrentContext;
+			cardView.CurrentTaskBoardId = CurrentTaskBoardId;
+			cardView.DrillThroughCompletionPercent = DrillThroughCompletionPercent;
+			cardView.DrillThroughProgressTotal = DrillThroughProgressTotal;
+			cardView.DrillThroughProgressComplete = DrillThroughProgressComplete;
+			cardView.DrillThroughProgressSizeComplete = DrillThroughProgressSizeComplete;
+			cardView.DrillThroughProgressSizeTotal = DrillThroughProgressSizeTotal;
+			cardView.GravatarLink = GravatarLink;
+			cardView.Icon = Icon;
+			cardView.IsOlderThanXDays = IsOlderThanXDays;
+			cardView.LaneTitle = LaneTitle;
+			cardView.ParentTaskboardId = ParentTaskboardId;
+			cardView.SmallGravatarLink = SmallGravatarLink;
+			cardView.TaskBoardCompletionPercent = TaskBoardCompletionPercent;
+			cardView.TaskBoardCompletedCardCount = TaskBoardCompletedCardCount;
+			cardView.TaskBoardCompletedCardSize = TaskBoardCompletedCardSize;
+			cardView.TaskBoardTotalCards = TaskBoardTotalCards;
+			cardView.TaskBoardTotalSize = TaskBoardTotalSize;
 
 			return cardView;
 		}
@@ -116,47 +175,47 @@ namespace LeanKit.API.Client.Library.TransferObjects
 
 	public class CardUpdateResult
 	{
-		public virtual int BoardVersion { get; set; }
-		public virtual CardView CardDTO { get; set; }
+		public int BoardVersion { get; set; }
+		public CardView CardDTO { get; set; }
 	}
 
 	public class CardAddResult
 	{
-		public virtual int BoardVersion { get; set; }
-		public virtual Lane Lane { get; set; }
-		public virtual long CardId { get; set; }
+		public int BoardVersion { get; set; }
+		public Lane Lane { get; set; }
+		public long CardId { get; set; }
 	}
 
 	public class CardMoveResult
 	{
-		public virtual long BoardVersion { get; set; }
+		public long BoardVersion { get; set; }
 	}
 
 	public class CardMoveBetweenBoardsResult
 	{
-		public virtual long BoardVersion { get; set; }
-		public virtual string DestinationLaneName { get; set; }
-		public virtual long DestinationLaneId { get; set; }
-		public virtual long SourceBoardId { get; set; }
-		public virtual long DestinationBoardId { get; set; }
+		public long BoardVersion { get; set; }
+		public string DestinationLaneName { get; set; }
+		public long DestinationLaneId { get; set; }
+		public long SourceBoardId { get; set; }
+		public long DestinationBoardId { get; set; }
 	}
 
 	public class CardsUpdateResult
 	{
-		public virtual int UpdatedCardsCount { get; set; }
+		public int UpdatedCardsCount { get; set; }
 	}
 
 	public class CardsDeleteResult
 	{
-		public virtual long BoardVersion { get; set; }
+		public long BoardVersion { get; set; }
 	}
 
     public class CardDelegationResult
     {
-        public virtual long ParentBoardId { get; set; }
-        public virtual long DelegationCardId { get; set; }
-        public virtual long DestinationLaneId { get; set; }
-        public virtual string DestinationLaneName { get; set; }
+        public long ParentBoardId { get; set; }
+        public long DelegationCardId { get; set; }
+        public long DestinationLaneId { get; set; }
+        public string DestinationLaneName { get; set; }
     }
 
 }

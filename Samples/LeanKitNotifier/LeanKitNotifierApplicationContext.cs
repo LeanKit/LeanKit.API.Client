@@ -90,7 +90,8 @@ namespace LeanKitNotifier
 			if (boardChangedEventArgs.BlockedCards.Any())
 				sb.AppendLine(string.Format("{0} card(s) were blocked.", boardChangedEventArgs.BlockedCards.Count));
 
-			ShowMessage(sb.ToString());
+			var message = sb.ToString();
+			if (message.Length > 0) ShowMessage(message);
 		}
 
 		public void ShowMessage(string message)
