@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 // <copyright company="LeanKit Inc.">
 //     Copyright (c) LeanKit Inc.  All rights reserved.
-// </copyright> 
+// </copyright>
 //------------------------------------------------------------------------------
 
 using System;
@@ -72,7 +72,7 @@ namespace LeanKit.API.Client.Library
 		private void InitBoard()
 		{
 			//setup the loop intervals
-			//Probably need to do this on a different thread    
+			//Probably need to do this on a different thread
 			do
 			{
 				try
@@ -123,7 +123,7 @@ namespace LeanKit.API.Client.Library
 		{
 			const int pulse = 1000;
 			var pollingInterval = (long) _integrationSettings.CheckForUpdatesIntervalSeconds*1000;
-			
+
 			var stopWatch = new System.Diagnostics.Stopwatch();
 			stopWatch.Start();
 
@@ -301,7 +301,6 @@ namespace LeanKit.API.Client.Library
 				{
 					OnClientError(new ClientErrorEventArgs {Exception = ex, Message = "Error checking for board events."});
 				}
-
 			} while (ShouldContinue);
 
 			stopWatch.Stop();
@@ -533,8 +532,12 @@ namespace LeanKit.API.Client.Library
 				if (originalCard == null)
 					return null;
 
-				var updatedCard =
-					affectedLanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId);
+				var lanes = affectedLanes.ToList();
+
+				var updatedCard = (lanes.ContainsCard(boardEvent.CardId))
+					? lanes.FindContainedCard(boardEvent.ToLaneId, boardEvent.CardId)
+					: GetCard(boardEvent.CardId, true);
+
 				return new CardUpdateEvent(boardEvent.EventDateTime, originalCard, updatedCard);
 			}
 			catch (ItemNotFoundException ex)
@@ -566,34 +569,39 @@ namespace LeanKit.API.Client.Library
 
 		public virtual Card GetCard(long cardId)
 		{
-			Card card;
-			_boardLock.EnterReadLock();
-			try
+			return GetCard(cardId, false);
+		}
+
+		public virtual Card GetCard(long cardId, bool bypassCache)
+		{
+			Card card = null;
+			if (!bypassCache)
 			{
-				card = _board.GetCardById(cardId);
+				_boardLock.EnterReadLock();
+				try
+				{
+					card = _board.GetCardById(cardId);
+				}
+				finally
+				{
+					_boardLock.ExitReadLock();
+				}
 			}
-			finally
-			{
-				_boardLock.ExitReadLock();
-			}
+
+			if (card != null) return card;
 
 			// try getting card directly from the api
-			if (card == null)
-			{
-				var c = _api.GetCard(_boardId, cardId);
-				card = (c != null) ? c.ToCard() : null;
-			}
+			var c = _api.GetCard(_boardId, cardId);
+			card = (c != null) ? c.ToCard() : null;
+			if (card != null) return card;
 
 			//try to find in archive, suppose it is not loaded
-			if (card == null)
-			{
-				var archive = _api.GetArchiveCards(_boardId);
-				var firstOrDefault = (archive != null) ? archive.FirstOrDefault(x => x.Id == cardId) : null;
-				if (firstOrDefault != null) card = firstOrDefault.ToCard();
-				//TODO: need to load the archive
-				//Also, could be possible that the card is part of the cards older than 90 days
-				//In that case we my need to do a search too.
-			}
+			var archive = _api.GetArchiveCards(_boardId);
+			var firstOrDefault = (archive != null) ? archive.FirstOrDefault(x => x.Id == cardId) : null;
+			if (firstOrDefault != null) card = firstOrDefault.ToCard();
+			//TODO: need to load the archive
+			//Also, could be possible that the card is part of the cards older than 90 days
+			//In that case we my need to do a search too.
 
 			if (card == null) throw new ItemNotFoundException();
 
@@ -826,7 +834,7 @@ namespace LeanKit.API.Client.Library
 			//	//ApplyBoardChanges(results.BoardVersion, new[] {results.Lane});
 			//} finally {
 			//	_boardLock.ExitWriteLock();
-			//}			
+			//}
 		}
 
 		public void UpdateTask(Card task, long cardId)
@@ -853,7 +861,7 @@ namespace LeanKit.API.Client.Library
 			//            }
 			//            finally {
 			//                _boardLock.ExitWriteLock();
-			//            }			
+			//            }
 		}
 
 		public void DeleteTask(long taskId, long cardId)
@@ -864,7 +872,7 @@ namespace LeanKit.API.Client.Library
 
 		public void MoveTask(long taskId, long cardId, long toLaneId, int position)
 		{
-			MoveTask(taskId, cardId, toLaneId, position, string.Empty);			
+			MoveTask(taskId, cardId, toLaneId, position, string.Empty);
 		}
 
 		public void MoveTask(long taskId, long cardId, long toLaneId, int position, string wipOverrideReason)
@@ -901,7 +909,8 @@ namespace LeanKit.API.Client.Library
 		#region obsolete
 
 		[Obsolete("Creating taskboards is no longer supported", true)]
-		public void CreateTaskboard(long cardId, TaskboardTemplateType templateType, long cardContextId) {
+		public void CreateTaskboard(long cardId, TaskboardTemplateType templateType, long cardContextId)
+		{
 			//_boardLock.EnterUpgradeableReadLock();
 			//try
 			//{
@@ -931,7 +940,8 @@ namespace LeanKit.API.Client.Library
 		}
 
 		[Obsolete("Deleting taskboards is no longer supported", true)]
-		public void DeleteTaskboard(long cardId, long taskboardId) {
+		public void DeleteTaskboard(long cardId, long taskboardId)
+		{
 			//_boardLock.EnterUpgradeableReadLock();
 			//try
 			//{
@@ -962,12 +972,14 @@ namespace LeanKit.API.Client.Library
 		}
 
 		[Obsolete("Use AddTask instead")]
-		public void AddTaskboardCard(Card card, long taskboardId) {
+		public void AddTaskboardCard(Card card, long taskboardId)
+		{
 			AddTaskboardCard(card, taskboardId, string.Empty);
 		}
 
 		[Obsolete("Use AddTask instead")]
-		public void AddTaskboardCard(Card card, long taskboardId, string wipOverrideReason) {
+		public void AddTaskboardCard(Card card, long taskboardId, string wipOverrideReason)
+		{
 			//var results = string.IsNullOrEmpty(wipOverrideReason)
 			//	? _api.AddTaskboardCard(_boardId, taskboardId, card)
 			//	: _api.AddTaskboardCard(_boardId, taskboardId, card, wipOverrideReason);
@@ -982,12 +994,14 @@ namespace LeanKit.API.Client.Library
 		}
 
 		[Obsolete("Use UpdateTask instead")]
-		public void UpdateTaskboardCard(Card card, long taskboardId) {
+		public void UpdateTaskboardCard(Card card, long taskboardId)
+		{
 			UpdateTaskboardCard(card, taskboardId, string.Empty);
 		}
 
 		[Obsolete("Use UpdateTask instead")]
-		public void UpdateTaskboardCard(Card card, long taskboardId, string wipOverrideReason) {
+		public void UpdateTaskboardCard(Card card, long taskboardId, string wipOverrideReason)
+		{
 			//var results = string.IsNullOrEmpty(wipOverrideReason)
 			//	? _api.UpdateTaskboardCard(_boardId, taskboardId, card)
 			//	: _api.UpdateTaskboardCard(_boardId, taskboardId, card, wipOverrideReason);
@@ -1008,7 +1022,8 @@ namespace LeanKit.API.Client.Library
 		}
 
 		[Obsolete("Use DeleteTask instead")]
-		public void DeleteTaskboardCard(long cardId, long taskboardId) {
+		public void DeleteTaskboardCard(long cardId, long taskboardId)
+		{
 			throw new NotImplementedException();
 		}
 
