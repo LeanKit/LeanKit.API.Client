@@ -32,6 +32,23 @@ var leanKitAuth = new LeanKitBasicAuth
 var api = new LeanKitClientFactory().Create(leanKitAuth);
 ```
 
+#### Connecting to alternate LeanKit domains
+
+To connect to other LeanKit domains, such as LeanKit for Construction [leankit.co](http://leankit.co), use the `UrlTemplateOverride` property.
+
+```
+var leanKitAuth = new LeanKitBasicAuth
+	{
+		Hostname = "MyAccount", 
+			   // Only the account name portion of the URL
+			   // e.g. https://MyAccount.leankit.com
+		Username = "your-account-email-address",
+		Password = "your-account-password",
+		UrlTemplateOverride = "https://{0}.leankit.co"
+	};
+var api = new LeanKitClientFactory().Create(leanKitAuth);
+```
+
 ## LeanKitIntegration
 
 This class is designed to be used in stateful implementations. This class monitors the changes to a Board, and raises events whenever a board is changed. This library helps reduce the complexity of polling for changes. In addition, this class exposes the same command and query methods that are available in the LeanKitClient class. Leveraging its stateful nature, many of these queries and commands can be optimized, and provide more powerful validation.
