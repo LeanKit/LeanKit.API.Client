@@ -199,7 +199,7 @@ Visit [support.leankit.com](http://support.leankit.com).
 
 ## Copyright
 
-Copyright &copy; 2013-2014 LeanKit Inc.
+Copyright &copy; 2013-2015 LeanKit Inc.
 
 ## License
 
