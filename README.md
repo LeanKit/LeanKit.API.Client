@@ -79,7 +79,7 @@ integration.StartWatching();
 
 ## Connecting through an HTTP proxy server
 
-To connect to the LeanKit API through an HTTP proxy server, you will need to add or update your .NET application `app.config` or `web.config` file to include a `<defaultProxy>` section.
+To connect to the LeanKit API through an HTTP proxy server, you will need to add or update your .NET application's `app.config` or `web.config` file to include a `<defaultProxy>` section.
 
 ```
 <system.net>
