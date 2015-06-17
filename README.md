@@ -77,6 +77,30 @@ integration.BoardChanged += integration_BoardChanged;
 integration.StartWatching();
 ```
 
+## Connecting through an HTTP proxy server
+
+To connect to the LeanKit API through an HTTP proxy server, you will need to add or update your .NET application `app.config` or `web.config` file to include a `<defaultProxy>` section.
+
+```
+<system.net>
+  <defaultProxy useDefaultCredentials="true">
+    <proxy bypassonlocal="true" usesystemdefault="true" />
+  </defaultProxy>
+</system.net>
+```
+
+Or, if more granular control of the proxy is required, it could look something like:
+
+```
+<system.net>
+  <defaultProxy enabled="true" useDefaultCredentials="false">
+    <proxy usesystemdefaults="true" proxyaddress="http://192.168.1.10:3128" bypassonlocal="true" />
+  </defaultProxy>
+</system.net>
+```
+
+For more help, please review the .NET documentation on [proxy configuration](https://msdn.microsoft.com/en-us/library/kd3cf2ex(v=vs.110).aspx).
+
 ### LeanKitClient Interface
 
 ```
