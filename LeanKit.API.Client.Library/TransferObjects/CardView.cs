@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright company="LeanKit Inc.">
 //     Copyright (c) LeanKit Inc.  All rights reserved.
-// </copyright> 
+// </copyright>
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
@@ -21,7 +21,12 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		public CardType Type { get; set; }
 		public long TypeId { get; set; }
 		public PriorityType Priority { get; set; }
-		public string PriorityText { get { return Priority.ToString(); } }
+
+		public string PriorityText
+		{
+			get { return Priority.ToString(); }
+		}
+
 		public string TypeName { get; set; }
 		public string TypeIconPath { get; set; }
 		public string TypeColorHex { get; set; }
@@ -54,11 +59,16 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		public long[] AssignedUserIds { get; set; }
 		public List<AssignedUserInfo> AssignedUsers { get; set; }
 		public long? DrillThroughBoardId { get; set; }
-		public bool HasDrillThroughBoard { get { return DrillThroughBoardId.HasValue; } }
+
+		public bool HasDrillThroughBoard
+		{
+			get { return DrillThroughBoardId.HasValue; }
+		}
+
 		public List<Comment> Comments { get; set; }
 		public List<CardEvent> HistoryEvents { get; set; }
-		public int? ParentCardId { get; set; }
-		public int? ParentBoardId { get; set; }
+		public long? ParentCardId { get; set; }
+		public long? ParentBoardId { get; set; }
 		public string ExternalCardIdPrefix { get; set; }
 		public string ActualFinishDate { get; set; }
 		public string ActualStartDate { get; set; }
@@ -114,7 +124,9 @@ namespace LeanKit.API.Client.Library.TransferObjects
 			card.Title = Title;
 			card.TypeId = TypeId;
 			card.Version = Version;
-			card.AssignedUserIds = (AssignedUsers != null) ? (AssignedUserIds != null) ? AssignedUserIds : AssignedUsers.Select(x => x.Id.Value).ToArray() : null;
+			card.AssignedUserIds = (AssignedUsers != null)
+				? (AssignedUserIds != null) ? AssignedUserIds : AssignedUsers.Select(x => x.Id.Value).ToArray()
+				: null;
 			card.Comments = Comments;
 			card.HistoryEvents = HistoryEvents;
 			card.LastMove = LastMove;

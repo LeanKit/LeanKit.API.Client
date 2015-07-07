@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright company="LeanKit Inc.">
 //     Copyright (c) LeanKit Inc.  All rights reserved.
-// </copyright> 
+// </copyright>
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
@@ -75,8 +75,8 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		public List<CardEvent> HistoryEvents { get; set; }
 		public List<CardContextView> CardContexts { get; set; }
 
-		public int? ParentCardId { get; set; }
-		public int? ParentBoardId { get; set; }
+		public long? ParentCardId { get; set; }
+		public long? ParentBoardId { get; set; }
 		public string ActualFinishDate { get; set; }
 		public string ActualStartDate { get; set; }
 		public string AssignedUserName { get; set; }

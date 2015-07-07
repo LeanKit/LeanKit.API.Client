@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeanKit.API.Client.Library", "LeanKit.API.Client.Library\LeanKit.API.Client.Library.csproj", "{E1A6887D-DCEE-4B78-8187-4BBC1B370776}"
 EndProject
@@ -19,6 +19,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeanKitCmdQuery", "Samples\LeanKitCmdQuery\LeanKitCmdQuery.csproj", "{2BD1EACB-F722-45D5-87D7-4980C93EA0F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeanKitNotifier", "Samples\LeanKitNotifier\LeanKitNotifier.csproj", "{4AFD2A23-32B8-4586-84A1-D095548CE2A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{845E8B5C-18DA-49D6-B9D9-EAB1C11FC1D0}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
