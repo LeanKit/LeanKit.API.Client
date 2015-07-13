@@ -275,13 +275,13 @@ namespace LeanKit.API.Client.Library
 		public long PostComment(long boardId, long cardId, Comment comment)
 		{
 			var resource = "/Kanban/Api/Card/SaveComment/" + boardId + "/" + cardId;
-			return _restCommandProcessor.Post<int>(_accountAuth, resource, comment);
+			return _restCommandProcessor.Post<long>(_accountAuth, resource, comment);
 		}
 
 		public long PostCommentByExternalId(long boardId, string externalId, Comment comment)
 		{
 			var resource = "/Kanban/Api/Card/SaveCommentByExternalId/" + boardId + "/" + Uri.EscapeDataString(externalId);
-			return _restCommandProcessor.Post<int>(_accountAuth, resource, comment);
+			return _restCommandProcessor.Post<long>(_accountAuth, resource, comment);
 		}
 
 		public IEnumerable<CardEvent> GetCardHistory(long boardId, long cardId)
