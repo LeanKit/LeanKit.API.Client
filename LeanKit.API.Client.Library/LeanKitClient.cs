@@ -272,13 +272,13 @@ namespace LeanKit.API.Client.Library
 			return _restCommandProcessor.Get<List<Comment>>(_accountAuth, resource);
 		}
 
-		public int PostComment(long boardId, long cardId, Comment comment)
+		public long PostComment(long boardId, long cardId, Comment comment)
 		{
 			var resource = "/Kanban/Api/Card/SaveComment/" + boardId + "/" + cardId;
 			return _restCommandProcessor.Post<int>(_accountAuth, resource, comment);
 		}
 
-		public int PostCommentByExternalId(long boardId, string externalId, Comment comment)
+		public long PostCommentByExternalId(long boardId, string externalId, Comment comment)
 		{
 			var resource = "/Kanban/Api/Card/SaveCommentByExternalId/" + boardId + "/" + Uri.EscapeDataString(externalId);
 			return _restCommandProcessor.Post<int>(_accountAuth, resource, comment);
@@ -483,11 +483,12 @@ namespace LeanKit.API.Client.Library
 
 		#region Attachment Methods
 
-		public long SaveAttachment(long boardId, long cardId, string fileName, string description, string mimeType, byte[] fileBytes)
+		public long SaveAttachment(long boardId, long cardId, string fileName, string description, string mimeType,
+			byte[] fileBytes)
 		{
 			var resource = string.Format("/kanban/api/card/SaveAttachment/{0}/{1}", boardId, cardId);
 			var parameters = new Dictionary<string, object> {{"Description", description}, {"Id", 0}};
-			return _restCommandProcessor.PostFile<long>(_accountAuth, resource, parameters, fileName, mimeType, fileBytes);			
+			return _restCommandProcessor.PostFile<long>(_accountAuth, resource, parameters, fileName, mimeType, fileBytes);
 		}
 
 		public long DeleteAttachment(long boardId, long cardId, long attachmentId)

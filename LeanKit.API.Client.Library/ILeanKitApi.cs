@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright company="LeanKit Inc.">
 //     Copyright (c) LeanKit Inc.  All rights reserved.
-// </copyright> 
+// </copyright>
 //------------------------------------------------------------------------------
 
 using System;
@@ -37,11 +37,11 @@ namespace LeanKit.API.Client.Library
 		CardsUpdateResult UpdateCards(long boardId, IEnumerable<Card> updatedCards);
 		long DeleteCard(long boardId, long cardId);
 		CardsDeleteResult DeleteCards(long boardId, IEnumerable<long> cardIds);
-        CardDelegationResult DelegateCard(long cardId, long delegationBoardId);
-        BoardUpdates CheckForUpdates(long boardId, int version);
+		CardDelegationResult DelegateCard(long cardId, long delegationBoardId);
+		BoardUpdates CheckForUpdates(long boardId, int version);
 		IEnumerable<Comment> GetComments(long boardId, long cardId);
-		int PostComment(long boardId, long cardId, Comment comment);
-		int PostCommentByExternalId(long boardId, string externalId, Comment comment);
+		long PostComment(long boardId, long cardId, Comment comment);
+		long PostCommentByExternalId(long boardId, string externalId, Comment comment);
 		IEnumerable<CardEvent> GetCardHistory(long boardId, long cardId);
 		IEnumerable<CardView> SearchCards(long boardId, SearchOptions options);
 		IEnumerable<CardList> ListNewCards(long boardId);
@@ -66,30 +66,36 @@ namespace LeanKit.API.Client.Library
 		AssetFile DownloadAttachment(long boardId, long attachmentId);
 
 		#region Obsolete
-	
+
 		[Obsolete("Creating taskboards is no longer supported", true)]
-		TaskboardCreateResult CreateTaskboard(long boardId, long containingCardId, TaskboardTemplateType templateType, long cardContextId);
+		TaskboardCreateResult CreateTaskboard(long boardId, long containingCardId, TaskboardTemplateType templateType,
+			long cardContextId);
+
 		[Obsolete("Deleting taskboards is no longer supported", true)]
 		TaskboardDeleteResult DeleteTaskboard(long boardId, long taskboardId);
 
 		[Obsolete("Use AddTask instead")]
 		CardAddResult AddTaskboardCard(long boardId, long taskboardId, Card newCard);
+
 		[Obsolete("Use AddTask instead")]
 		CardAddResult AddTaskboardCard(long boardId, long taskboardId, Card newCard, string wipOverrideReason);
+
 		[Obsolete("Use UpdateTask instead")]
 		CardUpdateResult UpdateTaskboardCard(long boardId, long taskboardId, Card updatedCard, string wipOverrideReason);
+
 		[Obsolete("Use UpdateTask instead")]
 		CardUpdateResult UpdateTaskboardCard(long boardId, long taskboardId, Card updatedCard);
+
 		[Obsolete("Use DeleteTask instead")]
 		long DeleteTaskboardCard(long boardId, long taskboardId, long cardId);
+
 		[Obsolete("Use MoveTask instead")]
 		CardMoveResult MoveTaskboardCard(long boardId, long taskboardId, long cardId, long toLaneId, int position,
 			string wipOverrideReason);
+
 		[Obsolete("Use MoveTask instead")]
 		CardMoveResult MoveTaskboardCard(long boardId, long taskboardId, long cardId, long toLaneId, int position);
 
 		#endregion
-
-
 	}
 }
