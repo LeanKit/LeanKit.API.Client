@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using LeanKit.API.Client.Library.Exceptions;
@@ -24,12 +25,14 @@ namespace LeanKit.API.Client.Library
 {
 	public class RestSharpCommandProcessor : IRestCommandProcessor
 	{
-		private const string LeanKitUserAgent = "LeanKit.API.Client/1.0.8";
+		private readonly string _leanKitUserAgent = "LeanKit.API.Client";
 		private readonly IntegrationSettings _settings;
 		private readonly IValidationService _validationService;
 
 		public RestSharpCommandProcessor(IValidationService validationService, IntegrationSettings settings)
 		{
+			var version = Assembly.GetExecutingAssembly().GetName().Version;
+			_leanKitUserAgent += "/" + version;
 			_validationService = validationService;
 			_settings = settings;
 		}
@@ -78,7 +81,7 @@ namespace LeanKit.API.Client.Library
 			request.Method = "POST";
 			request.ContentType = contentType;
 			request.ContentLength = formBytes.Length;
-			request.UserAgent = LeanKitUserAgent;
+            request.UserAgent = _leanKitUserAgent;
 			AddAuth(request, accountAuth);
 
 			using (var requestStream = request.GetRequestStream())
@@ -120,7 +123,7 @@ namespace LeanKit.API.Client.Library
 			var request = WebRequest.Create(accountAuth.GetAccountUrl() + resource) as HttpWebRequest;
 
 			if (request == null) throw new Exception("Error downloading file. Could not create HttpWebRequest");
-			request.UserAgent = LeanKitUserAgent;
+			request.UserAgent = _leanKitUserAgent;
 			AddAuth(request, accountAuth);
 
 			var response = request.GetResponse() as HttpWebResponse;
@@ -195,7 +198,7 @@ namespace LeanKit.API.Client.Library
 			{
 				BaseUrl = new Uri(accountAuth.GetAccountUrl()),
 				Authenticator = GetAuthenticator(accountAuth),
-				UserAgent = LeanKitUserAgent
+				UserAgent = _leanKitUserAgent
 			};
 
 			var response = RetryRequest(request, accountAuth, client);
