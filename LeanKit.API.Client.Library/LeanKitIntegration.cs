@@ -143,7 +143,7 @@ namespace LeanKit.API.Client.Library
 					stopWatch.Stop();
 
 					//Now do the work
-					var checkResults = _api.CheckForUpdates(_board.Id, (int) _board.Version);
+					var checkResults = _api.CheckForUpdates(_board.Id, _board.Version);
 
 					if (checkResults == null) continue;
 
@@ -308,7 +308,7 @@ namespace LeanKit.API.Client.Library
 			return CheckForUpdatesLoopResult.Exit;
 		}
 
-		private void ApplyBoardChanges(int boardVersion, IEnumerable<Lane> affectedLanes)
+		private void ApplyBoardChanges(long boardVersion, IEnumerable<Lane> affectedLanes)
 		{
 			_board.Version = boardVersion;
 
