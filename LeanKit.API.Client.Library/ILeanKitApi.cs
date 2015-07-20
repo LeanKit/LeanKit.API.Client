@@ -18,8 +18,8 @@ namespace LeanKit.API.Client.Library
 		IEnumerable<Lane> GetBacklogLanes(long boardId);
 		IEnumerable<HierarchicalLane> GetArchiveLanes(long boardId);
 		IEnumerable<CardView> GetArchiveCards(long boardId);
-		Board GetNewerIfExists(long boardId, int version);
-		IEnumerable<BoardHistoryEvent> GetBoardHistorySince(long boardId, int version);
+		Board GetNewerIfExists(long boardId, long version);
+		IEnumerable<BoardHistoryEvent> GetBoardHistorySince(long boardId, long version);
 		CardView GetCard(long boardId, long cardId);
 		Card GetCardByExternalId(long boardId, string externalCardId);
 		BoardIdentifiers GetBoardIdentifiers(long boardId);
@@ -38,7 +38,7 @@ namespace LeanKit.API.Client.Library
 		long DeleteCard(long boardId, long cardId);
 		CardsDeleteResult DeleteCards(long boardId, IEnumerable<long> cardIds);
 		CardDelegationResult DelegateCard(long cardId, long delegationBoardId);
-		BoardUpdates CheckForUpdates(long boardId, int version);
+		BoardUpdates CheckForUpdates(long boardId, long version);
 		IEnumerable<Comment> GetComments(long boardId, long cardId);
 		long PostComment(long boardId, long cardId, Comment comment);
 		long PostCommentByExternalId(long boardId, string externalId, Comment comment);

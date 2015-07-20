@@ -134,13 +134,13 @@ namespace LeanKit.API.Client.Library
 			return _restCommandProcessor.Get<List<CardView>>(_accountAuth, resource);
 		}
 
-		public Board GetNewerIfExists(long boardId, int version)
+		public Board GetNewerIfExists(long boardId, long version)
 		{
 			var resource = string.Format("/Kanban/Api/Board/{0}/BoardVersion/{1}/GetNewerIfExists", boardId, version);
 			return _restCommandProcessor.Get<Board>(_accountAuth, resource);
 		}
 
-		public IEnumerable<BoardHistoryEvent> GetBoardHistorySince(long boardId, int version)
+		public IEnumerable<BoardHistoryEvent> GetBoardHistorySince(long boardId, long version)
 		{
 			var resource = string.Format("/Kanban/Api/Board/{0}/BoardVersion/{1}/GetBoardHistorySince", boardId, version);
 			return _restCommandProcessor.Get<List<BoardHistoryEvent>>(_accountAuth, resource);
@@ -260,7 +260,7 @@ namespace LeanKit.API.Client.Library
 			return _restCommandProcessor.Post<CardDelegationResult>(_accountAuth, resource);
 		}
 
-		public BoardUpdates CheckForUpdates(long boardId, int version)
+		public BoardUpdates CheckForUpdates(long boardId, long version)
 		{
 			var resource = "/Kanban/Api/Board/" + boardId + "/BoardVersion/" + version + "/CheckForUpdates";
 			return _restCommandProcessor.Get<BoardUpdates>(_accountAuth, resource);
