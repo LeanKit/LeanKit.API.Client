@@ -220,3 +220,4 @@ pip-log.txt
 
 packages
 *.DotSettings
+.vs

@@ -10,4 +10,4 @@ Copy latest .dll into .\lib\net40
 
 `nuget pack .\LeanKit.API.Client.Library.dll.nuspec`
 
-`nuget push .\LeanKit.API.Client.1.2.3.nupkg`
+`nuget push .\LeanKit.API.Client.1.2.4.nupkg`
