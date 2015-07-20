@@ -14,7 +14,7 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		public bool HasUpdates { get; set; }
 		public List<Lane> AffectedLanes { get; set; }
 		public List<BoardHistoryEvent> Events { get; set; }
-		public int CurrentBoardVersion { get; set; }
+		public long CurrentBoardVersion { get; set; }
 		public Board NewPayload { get; set; }
 
 		public bool RequiresRefesh()

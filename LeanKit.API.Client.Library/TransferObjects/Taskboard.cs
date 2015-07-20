@@ -19,6 +19,6 @@ namespace LeanKit.API.Client.Library.TransferObjects
 		public virtual IList<long?> TopLevelLaneIds { get; set; }
 		public virtual CardContext CardContext { get; set; }
 		public int ProgressPercentage { get; set; }
-		public int BoardVersion { get; set; }
+		public long BoardVersion { get; set; }
 	}
 }

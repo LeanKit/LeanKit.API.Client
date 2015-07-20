@@ -175,13 +175,13 @@ namespace LeanKit.API.Client.Library.TransferObjects
 
 	public class CardUpdateResult
 	{
-		public int BoardVersion { get; set; }
+		public long BoardVersion { get; set; }
 		public CardView CardDTO { get; set; }
 	}
 
 	public class CardAddResult
 	{
-		public int BoardVersion { get; set; }
+		public long BoardVersion { get; set; }
 		public Lane Lane { get; set; }
 		public long CardId { get; set; }
 	}
