@@ -24,5 +24,13 @@ namespace LeanKit.API.Client.Library
 			var leanKitClient = new LeanKitClient(new RestSharpCommandProcessor(new ValidationService(null), new IntegrationSettings()));
 			return leanKitClient.Initialize(accountAuth);			
 		}
+
+		public ILeanKitApi Create(ILeanKitAccountAuth accountAuth, string dateFormat)
+		{
+			var settings = new IntegrationSettings() {DateFormat = dateFormat};
+			var leanKitClient = new LeanKitClient(new RestSharpCommandProcessor(new ValidationService(null), settings));
+			return leanKitClient.Initialize(accountAuth);
+		}
+
 	}
 }

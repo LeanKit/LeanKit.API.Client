@@ -18,6 +18,8 @@ namespace LeanKit.API.Client.Library
 	{
 		ILeanKitApi Create(ILeanKitAccountAuth accountAuth);
 
+		ILeanKitApi Create(ILeanKitAccountAuth accountAuth, string dateFormat);
+
 		[Obsolete("This is deprecated. Please use ILeanKitAccountAuth instead.")]
 		ILeanKitApi Create(LeanKitAccountAuth accountAuth);
 	}

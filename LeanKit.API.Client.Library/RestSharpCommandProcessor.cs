@@ -16,7 +16,6 @@ using LeanKit.API.Client.Library.Exceptions;
 using LeanKit.API.Client.Library.TransferObjects;
 using LeanKit.API.Client.Library.Validation;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using RestSharp;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 using UnauthorizedAccessException = LeanKit.API.Client.Library.Exceptions.UnauthorizedAccessException;
@@ -106,14 +105,12 @@ namespace LeanKit.API.Client.Library
 
 			if (string.IsNullOrEmpty(rawJson)) return new T();
 
-			var authUserDateFormat = _settings.DateFormat;
-
-			var isoDateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = authUserDateFormat };
+			var authUserDateFormat = _settings.DateFormat + " hh:mm:ss t";
 
 			var retVal = JsonConvert.DeserializeObject<T>(rawJson, new JsonSerializerSettings
 			{
 				Error = HandleError,
-				Converters = { isoDateTimeConverter }
+				DateFormatString = authUserDateFormat
 			});
 			return retVal;
 		}
@@ -210,16 +207,14 @@ namespace LeanKit.API.Client.Library
 			}
 			var rawJson = asyncResponse.ReplyData;
 
-			var authUserDateFormat = _settings.DateFormat;
-
-			var isoDateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = authUserDateFormat };
+			var authUserDateFormat = _settings.DateFormat + " hh:mm:ss tt";
 
 			rawJson = rawJson.Substring(1, rawJson.Length - 2);
 
 			var retVal = JsonConvert.DeserializeObject<T>(rawJson, new JsonSerializerSettings
 			{
 				Error = HandleError,
-				Converters = {isoDateTimeConverter}
+				DateFormatString = authUserDateFormat
 			});
 			return retVal;
 		}
