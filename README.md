@@ -94,7 +94,7 @@ Or, if more granular control of the proxy is required, it could look something l
 ```
 <system.net>
   <defaultProxy enabled="true" useDefaultCredentials="false">
-    <proxy usesystemdefaults="true" proxyaddress="http://192.168.1.10:3128" bypassonlocal="true" />
+    <proxy usesystemdefault="true" proxyaddress="http://192.168.1.10:3128" bypassonlocal="true" />
   </defaultProxy>
 </system.net>
 ```

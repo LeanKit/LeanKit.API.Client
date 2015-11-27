@@ -267,7 +267,7 @@ namespace LeanKit.API.Client.Library
 				throw new LeanKitAPIException("A failure occurred retrieving the response from the API.");
 			}
 
-			if (response.ResponseUri.Host != requestedResource.Host)
+			if (response.ResponseUri != null && response.ResponseUri.Host != requestedResource.Host)
 			{
 				throw new InvalidAPIResourceException();
 			}
