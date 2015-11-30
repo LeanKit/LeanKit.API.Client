@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeanKit.API.Client.Library", "LeanKit.API.Client.Library\LeanKit.API.Client.Library.csproj", "{E1A6887D-DCEE-4B78-8187-4BBC1B370776}"
 EndProject
@@ -22,7 +22,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeanKitNotifier", "Samples\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{845E8B5C-18DA-49D6-B9D9-EAB1C11FC1D0}"
 	ProjectSection(SolutionItems) = preProject
+		publish\LeanKit.API.Client.Library.dll.nuspec = publish\LeanKit.API.Client.Library.dll.nuspec
 		README.md = README.md
+		publish\readme.md = publish\readme.md
 	EndProjectSection
 EndProject
 Global
