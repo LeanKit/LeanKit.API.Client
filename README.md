@@ -20,7 +20,7 @@ This class exposes methods that interact directly with LeanKit API. This class e
 
 ### Connecting using LeanKitClient
 
-```
+```csharp
 var leanKitAuth = new LeanKitBasicAuth
 	{
 		Hostname = "MyAccount", 
@@ -36,7 +36,7 @@ var api = new LeanKitClientFactory().Create(leanKitAuth);
 
 To connect to other LeanKit domains, such as LeanKit for Construction [leankit.co](http://leankit.co), use the `UrlTemplateOverride` property.
 
-```
+```csharp
 var leanKitAuth = new LeanKitBasicAuth
 	{
 		Hostname = "MyAccount", 
@@ -49,6 +49,91 @@ var leanKitAuth = new LeanKitBasicAuth
 var api = new LeanKitClientFactory().Create(leanKitAuth);
 ```
 
+### Sample Helper Class in C&#35;
+
+```csharp
+using System.Collections.Generic;
+using System.Linq;
+using LeanKit.API.Client.Library;
+using LeanKit.API.Client.Library.TransferObjects;
+
+namespace CardUpdateTest
+{
+	public class LeanKitHelper
+	{
+		readonly ILeanKitApi _api;
+		public LeanKitHelper(string hostName, string emailAddress, string password)
+		{
+			_api = CreateApiClient(hostName, emailAddress, password);
+		}
+
+		private ILeanKitApi CreateApiClient(string hostName, string emailAddress, string password)
+		{
+			var auth = new LeanKitBasicAuth
+			{
+				Hostname = hostName,
+				Username = emailAddress,
+				Password = password
+			};
+
+			var api = new LeanKitClientFactory().Create(auth);
+			return api;
+		}
+
+		public List<BoardListing> GetBoards()
+		{
+			var boards = _api.GetBoards().ToList();
+			return boards;
+		}
+
+		public Board GetBoard(long boardId)
+		{
+			return _api.GetBoard(boardId);
+		}
+
+	}
+}
+```
+
+### Sample Helper Class in Visual Basic .NET
+
+```vbnet
+Imports LeanKit.API.Client.Library
+Imports LeanKit.API.Client.Library.TransferObjects
+
+Public Class LeanKitHelper
+
+    Dim ReadOnly _api As ILeanKitApi
+
+    Public Sub New(hostName As String, emailAddress As String, password As String)
+        _api = CreateApiClient(hostName, emailAddress, password)
+    End Sub
+
+    Private Function CreateApiClient(hostName As String, emailAddress As String, password As String) As ILeanKitApi
+        Dim auth as LeanKitBasicAuth
+        auth = New LeanKitBasicAuth()
+        auth.Hostname = hostName
+        auth.Username = emailAddress
+        auth.Password = password
+        
+        Dim api as ILeanKitApi
+        api = new LeanKitClientFactory().Create(auth)
+        CreateApiClient = api
+    End Function
+
+    Public Function GetBoards() As List(Of BoardListing)
+        Dim boards As List(Of BoardListing)
+        boards = _api.GetBoards()
+        GetBoards = boards
+    End Function
+
+    Public Function GetBoard(boardId As Long) As Board
+        GetBoard = _api.GetBoard(boardId)
+    End Function
+        
+End Class
+```
+
 ## LeanKitIntegration
 
 This class is designed to be used in stateful implementations. This class monitors the changes to a Board, and raises events whenever a board is changed. This library helps reduce the complexity of polling for changes. In addition, this class exposes the same command and query methods that are available in the LeanKitClient class. Leveraging its stateful nature, many of these queries and commands can be optimized, and provide more powerful validation.
@@ -57,7 +142,7 @@ This class is designed to retrieve and hold a reference to the board, and theref
 
 ### Connecting using LeanKitIntegration
 
-```
+```csharp
 var leanKitAuth = new LeanKitBasicAuth
 	{
 		Hostname = "MyAccount", 
@@ -81,7 +166,7 @@ integration.StartWatching();
 
 To connect to the LeanKit API through an HTTP proxy server, you will need to add or update your .NET application's `app.config` or `web.config` file to include a `<defaultProxy>` section.
 
-```
+```xml
 <system.net>
   <defaultProxy useDefaultCredentials="true">
     <proxy bypassonlocal="true" usesystemdefault="true" />
@@ -91,7 +176,7 @@ To connect to the LeanKit API through an HTTP proxy server, you will need to add
 
 Or, if more granular control of the proxy is required, it could look something like:
 
-```
+```xml
 <system.net>
   <defaultProxy enabled="true" useDefaultCredentials="false">
     <proxy usesystemdefault="true" proxyaddress="http://192.168.1.10:3128" bypassonlocal="true" />
@@ -103,7 +188,7 @@ For more help, please review the .NET documentation on [proxy configuration](htt
 
 ### LeanKitClient Interface
 
-```
+```csharp
 IEnumerable<BoardListing> GetBoards();
 Board GetBoard(long boardId);
 IEnumerable<Lane> GetBacklogLanes(long boardId);
@@ -139,7 +224,7 @@ long DeleteAttachment(long boardId, long cardId, long attachmentId);
 
 ### LeanKitIntegration Interface
 
-```
+```csharp
 event EventHandler<BoardStatusCheckedEventArgs> BoardStatusChecked;
 event EventHandler<BoardInfoRefreshedEventArgs> BoardInfoRefreshed;
 event EventHandler<BoardChangedEventArgs> BoardChanged;
@@ -172,7 +257,7 @@ void DeleteAttachment(long cardId, long attachmentId);
 
 ### BoardChangedEventArgs Properties
 
-```
+```csharp
 public List<CardMoveEvent> MovedCards { get; set; }
 public List<CardUpdateEvent> UpdatedCards { get; set; }
 public List<CardAddEvent> AddedCards { get; set; }
