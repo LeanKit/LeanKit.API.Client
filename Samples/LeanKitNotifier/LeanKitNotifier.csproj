@@ -82,13 +82,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="leankit-128x128.ico" />
-    <Content Include="leankit-16x16.ico" />
-    <Content Include="leankit-32x32.ico" />
     <Content Include="app.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="leankit-64x64.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\LeanKit.API.Client.Library\LeanKit.API.Client.Library.csproj">
