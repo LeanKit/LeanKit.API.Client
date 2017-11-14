@@ -1,0 +1,20 @@
+﻿// Note: Choose ** one ** of these to include in your local settings.json file
+
+// Basic Auth
+
+{
+  "hostname": "companyname",
+  "username": "me@companyname.com",
+  "password": "p@ssw0rd",
+  "testBoardId": "1234567890",
+  "testCardId": "1234567890"
+}
+
+// ** OR ** Token Auth
+
+{
+  "hostname": "companyname",
+  "token": "1234abcd",
+  "testBoardId": "1234567890",
+  "testCardId": "1234567890"
+}

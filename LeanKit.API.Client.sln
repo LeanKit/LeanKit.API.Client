@@ -1,88 +1,26 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeanKit.API.Client.Library", "LeanKit.API.Client.Library\LeanKit.API.Client.Library.csproj", "{E1A6887D-DCEE-4B78-8187-4BBC1B370776}"
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeanKit.API.Client", "LeanKit.API.Client\LeanKit.API.Client.csproj", "{6E33F4D9-B879-45C5-AC97-8AA0AF0ADF2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeanKit.API.Client.Library.Tests", "LeanKit.API.Client.Library.Tests\LeanKit.API.Client.Library.Tests.csproj", "{CFCCD916-5F02-4053-A022-6DF0ACEFD3B2}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{4745A8A2-D476-4716-A018-125BE88ED469}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{F10B42DD-2F42-45D9-B4AF-98CA6660CA4F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeanKitCmdQuery", "Samples\LeanKitCmdQuery\LeanKitCmdQuery.csproj", "{2BD1EACB-F722-45D5-87D7-4980C93EA0F1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeanKitNotifier", "Samples\LeanKitNotifier\LeanKitNotifier.csproj", "{4AFD2A23-32B8-4586-84A1-D095548CE2A8}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{845E8B5C-18DA-49D6-B9D9-EAB1C11FC1D0}"
-	ProjectSection(SolutionItems) = preProject
-		publish\LeanKit.API.Client.Library.dll.nuspec = publish\LeanKit.API.Client.Library.dll.nuspec
-		README.md = README.md
-		publish\readme.md = publish\readme.md
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sample-leankit-cli", "sample-leankit-cli\sample-leankit-cli.csproj", "{0EC6A6D9-5FBD-4D6E-9918-5481E54B8BBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Debug|Mixed Platforms = Debug|Mixed Platforms
-		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
-		Release|Mixed Platforms = Release|Mixed Platforms
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E1A6887D-DCEE-4B78-8187-4BBC1B370776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E1A6887D-DCEE-4B78-8187-4BBC1B370776}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E1A6887D-DCEE-4B78-8187-4BBC1B370776}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E1A6887D-DCEE-4B78-8187-4BBC1B370776}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{E1A6887D-DCEE-4B78-8187-4BBC1B370776}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E1A6887D-DCEE-4B78-8187-4BBC1B370776}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E1A6887D-DCEE-4B78-8187-4BBC1B370776}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E1A6887D-DCEE-4B78-8187-4BBC1B370776}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E1A6887D-DCEE-4B78-8187-4BBC1B370776}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E1A6887D-DCEE-4B78-8187-4BBC1B370776}.Release|x86.ActiveCfg = Release|Any CPU
-		{CFCCD916-5F02-4053-A022-6DF0ACEFD3B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CFCCD916-5F02-4053-A022-6DF0ACEFD3B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CFCCD916-5F02-4053-A022-6DF0ACEFD3B2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{CFCCD916-5F02-4053-A022-6DF0ACEFD3B2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{CFCCD916-5F02-4053-A022-6DF0ACEFD3B2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{CFCCD916-5F02-4053-A022-6DF0ACEFD3B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CFCCD916-5F02-4053-A022-6DF0ACEFD3B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CFCCD916-5F02-4053-A022-6DF0ACEFD3B2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{CFCCD916-5F02-4053-A022-6DF0ACEFD3B2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{CFCCD916-5F02-4053-A022-6DF0ACEFD3B2}.Release|x86.ActiveCfg = Release|Any CPU
-		{2BD1EACB-F722-45D5-87D7-4980C93EA0F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2BD1EACB-F722-45D5-87D7-4980C93EA0F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2BD1EACB-F722-45D5-87D7-4980C93EA0F1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{2BD1EACB-F722-45D5-87D7-4980C93EA0F1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{2BD1EACB-F722-45D5-87D7-4980C93EA0F1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2BD1EACB-F722-45D5-87D7-4980C93EA0F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2BD1EACB-F722-45D5-87D7-4980C93EA0F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2BD1EACB-F722-45D5-87D7-4980C93EA0F1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{2BD1EACB-F722-45D5-87D7-4980C93EA0F1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{2BD1EACB-F722-45D5-87D7-4980C93EA0F1}.Release|x86.ActiveCfg = Release|Any CPU
-		{4AFD2A23-32B8-4586-84A1-D095548CE2A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4AFD2A23-32B8-4586-84A1-D095548CE2A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4AFD2A23-32B8-4586-84A1-D095548CE2A8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{4AFD2A23-32B8-4586-84A1-D095548CE2A8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{4AFD2A23-32B8-4586-84A1-D095548CE2A8}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4AFD2A23-32B8-4586-84A1-D095548CE2A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4AFD2A23-32B8-4586-84A1-D095548CE2A8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4AFD2A23-32B8-4586-84A1-D095548CE2A8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{4AFD2A23-32B8-4586-84A1-D095548CE2A8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{4AFD2A23-32B8-4586-84A1-D095548CE2A8}.Release|x86.ActiveCfg = Release|Any CPU
+		{6E33F4D9-B879-45C5-AC97-8AA0AF0ADF2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E33F4D9-B879-45C5-AC97-8AA0AF0ADF2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E33F4D9-B879-45C5-AC97-8AA0AF0ADF2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E33F4D9-B879-45C5-AC97-8AA0AF0ADF2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EC6A6D9-5FBD-4D6E-9918-5481E54B8BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EC6A6D9-5FBD-4D6E-9918-5481E54B8BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EC6A6D9-5FBD-4D6E-9918-5481E54B8BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EC6A6D9-5FBD-4D6E-9918-5481E54B8BBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{2BD1EACB-F722-45D5-87D7-4980C93EA0F1} = {F10B42DD-2F42-45D9-B4AF-98CA6660CA4F}
-		{4AFD2A23-32B8-4586-84A1-D095548CE2A8} = {F10B42DD-2F42-45D9-B4AF-98CA6660CA4F}
+	GlobalSection(MonoDevelopProperties) = preSolution
+		version = 2.0.0.0
 	EndGlobalSection
 EndGlobal
