@@ -10,8 +10,6 @@ msbuild /t:pack /p:Configuration=Release
 
 [Publish to Nuget](https://docs.microsoft.com/en-us/nuget/create-packages/publish-a-package)
 
-Copy latest .dll into .\lib\net40
-
-`nuget pack .\LeanKit.API.Client.Library.dll.nuspec`
-
-`nuget push .\LeanKit.API.Client.2.0.0.nupkg`
+```
+nuget push LeanKit.API.Client/bin/Release/LeanKit.API.Client.2.0.0-beta-1.nupkg -Source https://www.nuget.org/api/v2/package
+```
