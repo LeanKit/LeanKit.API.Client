@@ -1,5 +1,8 @@
 # LeanKit.API.Client.Library
 
+### DEPRECATION NOTICE
+**This library is deprecated and has been unsupported since January 25, 2019. Additionally, it uses the LeanKit v1 API which is also deprecated. Please [use our v2 API directly](https://success.planview.com/Planview_LeanKit/LeanKit_API/01_v2) instead of this library.**
+
 The **LeanKit.API.Client.Library** namespace provides a wrapper library designed to simplify the integration of external systems and utilities with your LeanKit account. This library exposes mechanisms that support both interactions with LeanKit as well as a strongly-typed object model representing the main entities within LeanKit.
 
 This library exposes two primary ways to interact with LeanKit. These are the LeanKitClient and LeanKitIntegration classes. Both of these are explained below.
